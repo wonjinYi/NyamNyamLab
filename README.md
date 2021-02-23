@@ -4,5 +4,5 @@
 ### 뒷받침
 * React.js
 * ant-design
-* Google Sheets & Google App Script
+* Google Sheets & Google Apps Script
 * Naver Maps
