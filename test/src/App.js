@@ -1,12 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { React, useState } from 'react';
+import styled from "styled-components";
 
-function App() {
+import Header from "./components/Header";
+import Maps from "./components/Maps";
+import Footer from "./components/Footer";
+
+export default function App() {
   return (
-    <div className="App">
-      <h1> initial commit </h1>
-    </div>
+    <AppWrap className="App">
+      <Header />
+      <Maps />
+      <Footer />
+    </AppWrap>
   );
 }
 
-export default App;
+const AppWrap = styled.div`
+  display : flex;
+  flex-direction : column;
+  align-items : center;
+`;
