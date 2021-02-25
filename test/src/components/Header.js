@@ -1,10 +1,10 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import styled from 'styled-components';
 
 export default function Header () {
     return (
         <HeaderWrap className="Header">
-            <Logo>냠냠랩</Logo>
+            <Logo>냠냠랩(TEST)</Logo>
             <Menu>
                 [메뉴]
             </Menu>
@@ -22,6 +22,8 @@ const HeaderWrap = styled.div`
 const Logo = styled.h1`
     margin : 0;
     padding : 10px 20px;
+
+    font-family: 'Poor Story', cursive;
     `;
 
 const Menu = styled.div`

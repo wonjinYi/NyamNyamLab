@@ -6,6 +6,7 @@ import Maps from "./components/Maps";
 import Footer from "./components/Footer";
 
 export default function App() {
+
   return (
     <AppWrap className="App">
       <Header />
@@ -18,5 +19,6 @@ export default function App() {
 const AppWrap = styled.div`
   display : flex;
   flex-direction : column;
-  align-items : center;
+
+  height : 100%;
 `;

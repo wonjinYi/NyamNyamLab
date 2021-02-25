@@ -24,10 +24,11 @@ export default function Maps () {
 }
 
 const MapsWrap = styled.div`
-    width : 100%;
+    display : flex;
+    flex : 1;
     `;
 
 const Map = styled.div`
     width: 100%;
-    height : 100vh;
-`;
+    height : 100%;
+    `;

@@ -1,12 +1,17 @@
+import { React } from 'react';
 import styled from 'styled-components';
 
 export default function Footer () {
     return (
         <FooterWrap className="Footer">
-            <div>
-                <p>Wonjin Yi</p>
-                <p><strong>냠냠램 TEST </strong>조직내부의 폐쇄적인 냠냠거리 공유 서비스</p>
-            </div>
+            <Group>
+                <Item>Wonjin Yi</Item>
+                <Item><strong>Contact </strong>studioplug17@gmail.com</Item>
+                
+            </Group>
+            <Group style={{marginLeft : "auto",}}>
+                <Item><strong>냠냠램 TEST </strong>조직내부의 폐쇄적인 냠냠거리 공유 서비스</Item>
+            </Group>
         </FooterWrap>
     );
 }
@@ -20,3 +25,11 @@ const FooterWrap = styled.div`
     background-color : #333333;
     color : #a1a1a1;
     `; 
+
+const Group = styled.div`
+
+`;
+
+const Item = styled.p`
+    margin : 0;
+    `;
