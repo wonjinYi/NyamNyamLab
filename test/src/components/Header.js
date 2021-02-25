@@ -15,6 +15,8 @@ export default function Header () {
 const HeaderWrap = styled.div`
     display : flex;
     align-items : center;
+
+    padding : 10px 0px;
     `;
 
 const Logo = styled.h1`
