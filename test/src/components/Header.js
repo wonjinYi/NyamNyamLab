@@ -17,6 +17,9 @@ const HeaderWrap = styled.div`
     align-items : center;
 
     padding : 10px 0px;
+
+    background-color : #333333;
+    color : #FFFFFF;
     `;
 
 const Logo = styled.h1`
