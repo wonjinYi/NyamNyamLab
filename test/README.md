@@ -6,8 +6,8 @@
 * **Naver Web Dynamic Maps v3** [NCP](https://www.ncloud.com/product/applicationService/maps)
 
 
-아이콘(Icons)
-* **가게(Shop)** icon made by [Nikita Golubev](https://www.flaticon.com/authors/nikita-golubev) from [www.flaticon.com](https://www.flaticon.com/free-icon/shop_290957)
-* **커피(Coffee)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/coffee-cup_284815?related_id=284815&origin=pack)
-* **공기밥(Rice Bowl)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/rice-bowl_3800515)
-* **햄버거(Hamburger)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/hamburger_3075929)
+아이콘(Icons) ```./src/img/marker```
+* **가게(shop.svg)** icon made by [Nikita Golubev](https://www.flaticon.com/authors/nikita-golubev) from [www.flaticon.com](https://www.flaticon.com/free-icon/shop_290957)
+* **커피(coffee.svg)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/coffee-cup_284815?related_id=284815&origin=pack)
+* **공기밥(rice.svg)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/rice-bowl_3800515)
+* **햄버거(burger.svg)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/hamburger_3635562)
