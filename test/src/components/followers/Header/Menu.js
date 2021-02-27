@@ -2,35 +2,26 @@
 import { React } from 'react';
 import styled from 'styled-components';
 
-// imported components ==========================================
-import Menu from "./followers/Header/Menu";
-
 // Main Component ===============================================
-export default function Header () {
+export default function Menu () {
     return (
-        <HeaderWrap className="Header">
-            <Logo>냠냠랩(TEST)</Logo>
-            <Menu />
-        </HeaderWrap>
+        <MenuWrap className="Menu">
+            <span>필터</span>
+            <span>새로만들기</span>
+        </MenuWrap>
     );
 }
 
 // style ========================================================
-const HeaderWrap = styled.div`
+const MenuWrap = styled.div`
     display : flex;
+    justify-contents : center;
     align-items : center;
 
     padding : 10px 0px;
 
     background-color : #333333;
     color : #FFFFFF;
-    `;
-
-const Logo = styled.h1`
-    margin : 0;
-    padding : 10px 20px;
-    color : #FFFFFF;
-    font-family: 'Poor Story', cursive;
     `;
 
 // function =====================================================
