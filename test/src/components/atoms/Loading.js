@@ -13,7 +13,7 @@ export default function Loading ({ isLoading }) {
         return (
             <LoadingWrap className="Loading">
                 <Backdrop></Backdrop>
-                <Spin spinning={isLoading} size="large" />
+                <Spin spinning={isLoading} size="large" indicator={<LoadingOutlined style={{ fontSize: 64 }} spin />} />
             </LoadingWrap>
         );
     } else {
