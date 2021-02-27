@@ -27,7 +27,7 @@ src root에는 index, App 이 있습니다. 그 하위에 components 디렉토�
 ㄴ App
 ㄴ [components]
 ```
-components하위에는 아래와 같은 구조를 적용하였습니다. **이끌이**들은 components에 바로 배치하였고, **원자**와 **따름이**들은 하위 디렉토리로 깊숙히 넣어놓았습니다. 예를 들면, **Header 이끌이**의 **따름이** '헤더 아무개'는 [components-Followers-Header]안에 위치합니다.
+components하위에는 아래와 같은 구조를 적용하였습니다. **이끌이**들은 components에 바로 배치하였고, **원자**와 **따름이**들은 하위 디렉토리로 깊숙히 넣어놓았습니다. 예를 들면, **Header 이끌이**의 **따름이** '헤더 아무개'는 [components-followers-Header]안에 위치합니다.
 ```
 [components]
 ㄴ1번 이끌이 : Header
@@ -35,7 +35,7 @@ components하위에는 아래와 같은 구조를 적용하였습니다. **이�
 ㄴFooter
 ㄴ[atoms]
     ㄴ 여러가지 원자 컴포넌트들
-ㄴ[Follwers]
+ㄴ[followers]
     ㄴ [Header]
         ㄴ 헤더 아무개
     ㄴ [Maps]
