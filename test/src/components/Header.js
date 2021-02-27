@@ -25,7 +25,7 @@ const HeaderWrap = styled.div`
 const Logo = styled.h1`
     margin : 0;
     padding : 10px 20px;
-
+    color : #FFFFFF;
     font-family: 'Poor Story', cursive;
     `;
 
