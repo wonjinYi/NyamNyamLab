@@ -7,7 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
 // Main Component ===============================================
-export default function Maps ({ isLoading }) {
+export default function Loading ({ isLoading }) {
     
     if ( isLoading ){
         return (
