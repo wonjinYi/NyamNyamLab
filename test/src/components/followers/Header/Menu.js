@@ -6,15 +6,17 @@ import { Checkbox, Popover, Button, Tooltip } from "antd";
 import { FilterOutlined, PlusOutlined } from "@ant-design/icons"
 import 'antd/dist/antd.css';
 
+import DataStorage from "../../../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+
 // Main Component ===============================================
+const NYAM_TYPES = DataStorage("NYAM_TYPES");
+const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
+
 export default function Menu ({ setFilters }) {
-    const [checked, setChecked] = useState({
-        meal : true,
-        fastfood : true,
-        cvs : true,
-        cafe : true,
-    });
-    useEffect ( () => { setFilters(checked); }, [checked, setFilters] );
+    const [checked, setChecked] = useState( initChecked(NYAM_TYPES_KEY) );
+    useEffect ( () => { 
+        setFilters(checked); 
+    }, [checked, setFilters]);
 
     function onChange(e) { setChecked({ ...checked, [e.target.nyamType] : e.target.checked }) }
 
@@ -35,11 +37,12 @@ export default function Menu ({ setFilters }) {
 
 function filterContent(onChange, checked) {
     return (
-        <div>
-            <Checkbox onChange={onChange} checked={checked.meal} nyamType="meal">밥</Checkbox>
-            <Checkbox onChange={onChange} checked={checked.fastfood} nyamType="fastfood">패스트푸드</Checkbox>
-            <Checkbox onChange={onChange} checked={checked.cvs} nyamType="cvs">편의점</Checkbox>
-            <Checkbox onChange={onChange} checked={checked.cafe} nyamType="cafe">카페</Checkbox>
+        <div className="filterContent">
+        {
+            NYAM_TYPES_KEY.map( key => (
+                <Checkbox onChange={onChange} checked={checked[key]} nyamType={key} key={key}>{NYAM_TYPES[key]}</Checkbox>
+            ))
+        }
         </div>
     )
 }
@@ -61,4 +64,11 @@ const MenuButton = styled(Button)`
     `;
 
 // function =====================================================
-// *
+function initChecked(arr) {
+    let obj = {};
+    arr.forEach( el => {
+        obj[el] = true;
+    });
+
+    return obj;
+}

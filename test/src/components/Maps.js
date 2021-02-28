@@ -5,14 +5,17 @@ import axios from "axios";
 
 import styled from "styled-components";
 
+import DataStorage from "../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+
 // imported components ==========================================
 import Loading from "./atoms/Loading";
 
 // Main Component ===============================================
+console.log("map");
 let map = null;
 const mapValues = {
-    nyamListSource : "https://script.google.com/macros/s/AKfycbyuACrtmBSgcaehSnfbDVhSAMeScTP455Z44h4jtjxRGxJ5UNeVdOEh/exec",
-    nyamTypes : ["meal", "fastfood", "cvs", "cafe"],
+    nyamListSource : DataStorage("NYAM_LIST_SOURCE"),
+    nyamTypes : DataStorage("NYAM_TYPES_KEY"),
     mapSource : "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
     center : {
         lat : 37.552472, 
