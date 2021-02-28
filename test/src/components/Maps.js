@@ -12,21 +12,28 @@ import Loading from "./atoms/Loading";
 let map = null;
 const mapValues = {
     nyamListSource : "https://script.google.com/macros/s/AKfycbyuACrtmBSgcaehSnfbDVhSAMeScTP455Z44h4jtjxRGxJ5UNeVdOEh/exec",
+    nyamTypes : ["meal", "fastfood", "cvs", "cafe"],
     mapSource : "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
     center : {
         lat : 37.552472, 
         lng : 127.076665,
     },
     zoom : 16,
-}
+};
 
-export default function Maps () {
-    const [markers, setMarkers] = useState([]);
+export default function Maps ({ filters }) {
+    const [markers, setMarkers] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect( () => {
+        if ( markers !== null ) {
+            setMarkersVisible(markers, filters, setIsLoading);
+        }
+    }, [filters]);
 
     return (
         <MapsWrap className="Maps">
-            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMarkers); }} src={mapValues.mapSource} />
+            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, markers, setMarkers); }} src={mapValues.mapSource} />
 
             <Map id="map"></Map>
             <Loading isLoading={isLoading} />
@@ -50,7 +57,6 @@ const reqNyamList = {
     read : async () => {
         const { data } = await axios.get(mapValues.nyamListSource);
         console.log(data);
-        console.log(typeof data);
 
         return data;
     },
@@ -60,7 +66,24 @@ const reqNyamList = {
     },
 }
 
-const init = async(setIsLoading, setMarkers) => {
+const setMarkersVisible = (markers, filters, setIsLoading) => {
+    setIsLoading(true);
+
+    const types = mapValues.nyamTypes;
+    types.forEach( type => {
+        const target = markers[type];
+        const dest = filters[type];
+
+        if ( target[0].getVisible() !== dest ){ // 마커의 visible속성과 filters 프롭스값이 다르면
+            target.forEach( marker => { marker.setVisible(dest); });
+            return;
+        }
+    });
+
+    setIsLoading(false);
+}
+
+const init = async(setIsLoading, markers, setMarkers) => {
     setIsLoading(true);
 
     // set naver.maps.Map
@@ -77,7 +100,7 @@ const init = async(setIsLoading, setMarkers) => {
 
     // set markers
     const org = nyamList.shift(); // organization
-    const org_marker = new window.naver.maps.Marker({
+    /*const org_marker = */ new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(org.lat, org.lng),
         map: map,
         icon: {
@@ -87,8 +110,9 @@ const init = async(setIsLoading, setMarkers) => {
         }
     });
 
-    const temp = nyamList.map( item => ( // nyam items
-        new window.naver.maps.Marker({
+    const items = markersInit(); // nyam items
+    nyamList.forEach( item => { 
+        const temp = new window.naver.maps.Marker({
             position: new window.naver.maps.LatLng(item.lat, item.lng),
             map: map,
             icon: {
@@ -96,9 +120,10 @@ const init = async(setIsLoading, setMarkers) => {
               size: new window.naver.maps.Size(32, 32),
               origin: new window.naver.maps.Point(0, 0),
             }
-        })
-    ));
-    setMarkers(temp);
+        });
+        items[item.type].push(temp);
+    });
+    setMarkers(items);
 
     // set eventListener
     map.addListener("click", (e) => {
@@ -107,4 +132,13 @@ const init = async(setIsLoading, setMarkers) => {
     });
 
     setIsLoading(false);
+}
+
+function markersInit () {
+    let obj = {};
+    (mapValues.nyamTypes).forEach( category => {
+        obj[category] = [];
+    });
+
+    return obj;
 }

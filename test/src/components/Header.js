@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import Menu from "./followers/Header/Menu";
 
 // Main Component ===============================================
-export default function Header () {
+export default function Header ({ setFilters }) {
     return (
         <HeaderWrap className="Header">
             <Logo>냠냠랩(TEST)</Logo>
-            <Menu />
+            <Menu setFilters={setFilters} />
         </HeaderWrap>
     );
 }
