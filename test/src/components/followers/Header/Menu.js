@@ -9,7 +9,7 @@ import 'antd/dist/antd.css';
 import DataStorage from "../../../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 
 // Main Component ===============================================
-const NYAM_TYPES = DataStorage("NYAM_TYPES");
+const NYAM_TYPES = DataStorage("NYAM_TYPES"); // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 
 export default function Menu ({ setFilters }) {
