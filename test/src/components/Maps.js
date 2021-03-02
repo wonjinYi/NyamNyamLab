@@ -101,6 +101,21 @@ const init = async(setIsLoading, markers, setMarkers) => {
     // read nyamList
     const nyamList = await reqNyamList.read();
 
+
+    // // test test 
+    // var greenMarker = new window.naver.maps.Marker({
+    //     position: new window.naver.maps.LatLng(37.3613962, 127.1112487),
+    //     map: map,
+    //     title: 'Green',
+    //     icon: {
+            
+    //         size: new window.naver.maps.Size(38, 58),
+    //         anchor: new window.naver.maps.Point(19, 58),
+    //     },
+    //     draggable: true
+    // });
+    // // test test 
+
     // set markers
     const org = nyamList.shift(); // organization
     /*const org_marker = */ new window.naver.maps.Marker({
@@ -116,12 +131,18 @@ const init = async(setIsLoading, markers, setMarkers) => {
     const items = markersInit(); // nyam items
     nyamList.forEach( item => { 
         const temp = new window.naver.maps.Marker({
-            position: new window.naver.maps.LatLng(item.lat, item.lng),
-            map: map,
-            icon: {
-              url : `img/icons/${item.type}.png`,
-              size: new window.naver.maps.Size(32, 32),
-              origin: new window.naver.maps.Point(0, 0),
+            position : new window.naver.maps.LatLng(item.lat, item.lng),
+            map : map,
+            icon : {
+                content: [
+                    '<div>',
+                        '<div style="background-color:rgba(255,255,255,0.8); padding:5px; border-radius:16px; border:1px solid #d9d9d9;">',
+                            `<span>${item.name}</span>`,
+                        '</div>',
+                        `<img src="img/icons/${item.type}.png">`,
+                    '</div>'
+                ].join(''),
+                anchor: new window.naver.maps.Point(16, 48)
             }
         });
         items[item.type].push(temp);
