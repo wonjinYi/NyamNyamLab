@@ -26,11 +26,14 @@ const mapValues = {
     zoom : 16,
 };
 
+const nyams = markersInit();
 const markers = markersInit();
 
 export default function Maps ({ filters }) {
     //const [markers, setMarkers] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [mapsModalVisible, setMapsModalVisible] = useState(false);
+    const [selectedNyam, setSelectedNyam] = useState(null);
 
     useEffect( () => {
         if ( markers !== null ) {
@@ -40,10 +43,10 @@ export default function Maps ({ filters }) {
 
     return (
         <MapsWrap className="Maps">
-            {/* <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, markers, setMarkers); }} src={mapValues.mapSource} /> */}
-            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading); }} src={mapValues.mapSource} />
+            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam); }} src={mapValues.mapSource} />
 
             <Map id="map"></Map>
+            <MapsInfoModal selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
             <Loading isLoading={isLoading} />
         </MapsWrap>
     );
@@ -93,7 +96,7 @@ const setMarkersVisible = (filters, setIsLoading) => {
     setIsLoading(false);
 }
 
-const init = async(setIsLoading) => {
+const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam) => {
     setIsLoading(true);
 
     // set naver.maps.Map
@@ -120,8 +123,7 @@ const init = async(setIsLoading) => {
         }
     });
 
-    // nyam items
-    nyamList.forEach( item => { 
+    nyamList.forEach( item => { // nyam items
         const temp = new window.naver.maps.Marker({
             position : new window.naver.maps.LatLng(item.lat, item.lng),
             map : map,
@@ -137,19 +139,22 @@ const init = async(setIsLoading) => {
                 anchor: new window.naver.maps.Point(16, 48),
             }
         });
+
         temp.addListener("click", (e) => {
             const targetid = e.overlay["_nmarker_id"];
-            console.log(targetid);
 
             mapValues.nyamTypes.forEach ( type => {
-                markers[type].forEach( marker => {
-                    if( targetid === marker["_nmarker_id"] ) {
-                        console.log("찾음");
+                for( let i=0; i<markers[type].length; i++ ){
+                    if ( targetid === markers[type][i]["_nmarker_id"] ){
+                        setSelectedNyam(nyams[type][i]);
+                        setMapsModalVisible(true);
                         return;
                     }
-                })
-            })
+                }
+            });
         });
+
+        nyams[item.type].push(item);
         markers[item.type].push(temp);
     });
 
