@@ -24,19 +24,22 @@ const mapValues = {
     zoom : 16,
 };
 
+const markers = markersInit();
+
 export default function Maps ({ filters }) {
-    const [markers, setMarkers] = useState(null);
+    //const [markers, setMarkers] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect( () => {
         if ( markers !== null ) {
-            setMarkersVisible(markers, filters, setIsLoading);
+            setMarkersVisible(filters, setIsLoading);
         }
     }, [filters]);
 
     return (
         <MapsWrap className="Maps">
-            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, markers, setMarkers); }} src={mapValues.mapSource} />
+            {/* <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, markers, setMarkers); }} src={mapValues.mapSource} /> */}
+            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading); }} src={mapValues.mapSource} />
 
             <Map id="map"></Map>
             <Loading isLoading={isLoading} />
@@ -69,12 +72,14 @@ const reqNyamList = {
     },
 }
 
-const setMarkersVisible = (markers, filters, setIsLoading) => {
+const setMarkersVisible = (filters, setIsLoading) => {
     setIsLoading(true);
-
+    console.log(markers);
     const types = mapValues.nyamTypes;
     types.forEach( type => {
         const target = markers[type];
+        if (target.length === 0) { return; }
+
         const dest = filters[type];
 
         if ( target[0].getVisible() !== dest ){ // 마커의 visible속성과 filters 프롭스값이 다르면
@@ -86,7 +91,7 @@ const setMarkersVisible = (markers, filters, setIsLoading) => {
     setIsLoading(false);
 }
 
-const init = async(setIsLoading, markers, setMarkers) => {
+const init = async(setIsLoading) => {
     setIsLoading(true);
 
     // set naver.maps.Map
@@ -101,21 +106,6 @@ const init = async(setIsLoading, markers, setMarkers) => {
     // read nyamList
     const nyamList = await reqNyamList.read();
 
-
-    // // test test 
-    // var greenMarker = new window.naver.maps.Marker({
-    //     position: new window.naver.maps.LatLng(37.3613962, 127.1112487),
-    //     map: map,
-    //     title: 'Green',
-    //     icon: {
-            
-    //         size: new window.naver.maps.Size(38, 58),
-    //         anchor: new window.naver.maps.Point(19, 58),
-    //     },
-    //     draggable: true
-    // });
-    // // test test 
-
     // set markers
     const org = nyamList.shift(); // organization
     /*const org_marker = */ new window.naver.maps.Marker({
@@ -128,7 +118,7 @@ const init = async(setIsLoading, markers, setMarkers) => {
         }
     });
 
-    const items = markersInit(); // nyam items
+    // nyam items
     nyamList.forEach( item => { 
         const temp = new window.naver.maps.Marker({
             position : new window.naver.maps.LatLng(item.lat, item.lng),
@@ -142,18 +132,31 @@ const init = async(setIsLoading, markers, setMarkers) => {
                         `<img src="img/icons/${item.type}.png">`,
                     '</div>'
                 ].join(''),
-                anchor: new window.naver.maps.Point(16, 48)
+                anchor: new window.naver.maps.Point(16, 48),
             }
         });
-        items[item.type].push(temp);
+        temp.addListener("click", (e) => {
+            const targetid = e.overlay["_nmarker_id"];
+            console.log(targetid);
+
+            mapValues.nyamTypes.forEach ( type => {
+                markers[type].forEach( marker => {
+                    if( targetid === marker["_nmarker_id"] ) {
+                        console.log("찾음");
+                        return;
+                    }
+                })
+            })
+        });
+        markers[item.type].push(temp);
     });
-    setMarkers(items);
 
     // set eventListener
     map.addListener("click", (e) => {
         const latlng = e.coord;
         console.log("lat lng : ", latlng);
     });
+    
 
     setIsLoading(false);
 }
