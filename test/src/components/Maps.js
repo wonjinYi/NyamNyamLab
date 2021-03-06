@@ -8,6 +8,8 @@ import styled from "styled-components";
 import DataStorage from "../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 
 // imported components ==========================================
+import MapsInfoModal from "./followers/Maps/MapsInfoModal";
+
 import Loading from "./atoms/Loading";
 
 // Main Component ===============================================
