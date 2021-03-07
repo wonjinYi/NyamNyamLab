@@ -8,7 +8,7 @@ import styled from "styled-components";
 import DataStorage from "../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 
 // imported components ==========================================
-import MapsInfoModal from "./followers/Maps/MapsInfoModal";
+import MapsModal from "./followers/Maps/MapsModal";
 
 import Loading from "./atoms/Loading";
 
@@ -46,7 +46,7 @@ export default function Maps ({ filters }) {
             <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam); }} src={mapValues.mapSource} />
 
             <Map id="map"></Map>
-            <MapsInfoModal selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
+            <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
             <Loading isLoading={isLoading} />
         </MapsWrap>
     );
@@ -67,13 +67,9 @@ const Map = styled.div`
 const reqNyamList = {
     read : async () => {
         const { data } = await axios.get(mapValues.nyamListSource);
-        console.log(data);
+        console.log("readNyams", data);
 
         return data;
-    },
-
-    write : () => {
-
     },
 }
 
