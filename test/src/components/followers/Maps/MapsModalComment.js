@@ -2,13 +2,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Modal, Button } from 'antd';
-
 // imported components ==========================================
 // *
 
 // Main Component ===============================================
-export default function MapsModalComment ({ nyamListSoruce, nyamid }) {
+export default function MapsModalComment ({ nyamListSoruce, selectedNyam }) {
 
     return (
         <MapsModalCommentWrap className="MapsModalComment">
@@ -23,4 +21,3 @@ const MapsModalCommentWrap = styled.div`
     `;
 
 // function =====================================================
-// *

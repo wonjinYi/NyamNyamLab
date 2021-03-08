@@ -75,16 +75,16 @@ const reqNyamList = {
 
 const setMarkersVisible = (filters, setIsLoading) => {
     setIsLoading(true);
-    console.log(markers);
-    const types = mapValues.nyamTypes;
+
+    const types = mapValues.nyamTypes; // 정의되어있는 type배열 불러오기
+
     types.forEach( type => {
-        const target = markers[type];
-        if (target.length === 0) { return; }
+        const target = markers[type]; // markers의 한 type을 대상으로 정함
+        if (target.length === 0) { return; } // 대상이 비어있으면 바로 함수종료
 
-        const dest = filters[type];
-
-        if ( target[0].getVisible() !== dest ){ // 마커의 visible속성과 filters 프롭스값이 다르면
-            target.forEach( marker => { marker.setVisible(dest); });
+        const dest = filters[type]; // 업데이트 하려고 하는 값
+        if ( target[0].getVisible() !== dest ){ // target안의 첫번째 마커의 visible속성과, 업데이트 하려고 하는 값이 다르면
+            target.forEach( marker => { marker.setVisible(dest); }); // 업데이트!
             return;
         }
     });
@@ -138,16 +138,23 @@ const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam) => {
 
         temp.addListener("click", (e) => {
             const targetid = e.overlay["_nmarker_id"];
+            const types = mapValues.nyamTypes;
 
-            mapValues.nyamTypes.forEach ( type => {
-                for( let i=0; i<markers[type].length; i++ ){
-                    if ( targetid === markers[type][i]["_nmarker_id"] ){
-                        setSelectedNyam(nyams[type][i]);
+            for( let i = 0; i<types.length; i++){
+                const type = types[i];
+                let chk = false;
+
+                for( let j=0; j<markers[type].length; j++ ){
+                    if ( targetid === markers[type][j]["_nmarker_id"] ){
+                        setSelectedNyam(nyams[type][j]);
                         setMapsModalVisible(true);
-                        return;
+                        chk = true;
+                        break;
                     }
                 }
-            });
+
+                if (chk) { break; }
+            }
         });
 
         nyams[item.type].push(item);
