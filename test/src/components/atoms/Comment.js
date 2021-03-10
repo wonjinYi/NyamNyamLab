@@ -7,7 +7,6 @@ import { DeleteOutlined } from "@ant-design/icons"
 
 // Main Component ===============================================
 export default function Comment ({ content, onDelete }) {
-<DeleteOutlined />
     return (
         <CommentWrap className="Comment">
             <Content>{content}</Content>
@@ -37,3 +36,4 @@ const Content = styled.p`
     `;
 
 // function =====================================================
+// *
