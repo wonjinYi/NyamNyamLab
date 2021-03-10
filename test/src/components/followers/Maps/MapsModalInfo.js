@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { Modal, Button } from "antd";
+import { Modal, Button, List } from "antd";
 import axios from "axios";
 import parser from "yargs-parser";
 
@@ -21,17 +21,20 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam }) {
                     <Title>영업시간</Title> 
                     <p>{open}~{close}</p>
                 </div>
-                <p style={{marginLeft:"8px"}}>{`_ ${description}`}</p>
+                <p style={{marginLeft:"8px"}}>{description}</p>
             </Summary>
             <MenuWrap>
                 <Title>메뉴</Title>
-                <Menus>
-                {
-                    parsedMenu.map( menu => (
-                        <li key={menu.index}><strong>{menu.name}</strong> {menu.price}</li>
-                    ))
-                }
-                </Menus>
+                <List
+                    size="small"
+                    header={null}
+                    footer={null}
+                    bordered
+                    dataSource={parsedMenu.map( item => ( `${item.name} ${item.price}` ) )}
+                    renderItem={item => <List.Item>{item}</List.Item>}
+                    style={{borderRadius:"8px"}}
+                />
+                
             </MenuWrap>
         </MapsModalInfoWrap>
     );
@@ -41,6 +44,8 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam }) {
 const MapsModalInfoWrap = styled.div`
     display : flex;
     flex-direction : column;
+
+    padding-right : 8px; 
     `;
 
 const Summary = styled.div`
