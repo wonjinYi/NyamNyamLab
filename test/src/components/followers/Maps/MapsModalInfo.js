@@ -17,19 +17,22 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam }) {
     return (
         <MapsModalInfoWrap className="MapsModalInfo">
             <Summary>
-                <p><Title>영업시간</Title> {open}~{close}</p>
-                <p>{description}</p>
+                <div>
+                    <Title>영업시간</Title> 
+                    <p>{open}~{close}</p>
+                </div>
+                <p style={{marginLeft:"8px"}}>{`_ ${description}`}</p>
             </Summary>
-            <Menus>
+            <MenuWrap>
                 <Title>메뉴</Title>
-                <Contents>
+                <Menus>
                 {
                     parsedMenu.map( menu => (
-                        <li><strong>{menu.name}</strong> {menu.price}</li>
+                        <li key={menu.index}><strong>{menu.name}</strong> {menu.price}</li>
                     ))
                 }
-                </Contents>
-            </Menus>
+                </Menus>
+            </MenuWrap>
         </MapsModalInfoWrap>
     );
 }
@@ -44,16 +47,17 @@ const Summary = styled.div`
     display : flex;
     `;
 
-const Menus = styled.div`
+const MenuWrap = styled.div`
     display : flex;
     flex-direction : column;
     `;
 
-const Title = styled.span`
+const Title = styled.p`
+    margin : 0;
     font-weight : bold;
     `;
 
-const Contents = styled.ul`
+const Menus = styled.ul`
 
 `;
 
