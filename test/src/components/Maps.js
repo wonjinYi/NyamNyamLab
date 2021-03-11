@@ -28,9 +28,9 @@ const mapValues = {
 
 const nyams = markersInit();
 const markers = markersInit();
+let _isPickmode = null;
 
-export default function Maps ({ filters }) {
-    //const [markers, setMarkers] = useState(null);
+export default function Maps ({ filters, isPickmode, setPickCoord }) {
     const [isLoading, setIsLoading] = useState(false);
     const [mapsModalVisible, setMapsModalVisible] = useState(false);
     const [selectedNyam, setSelectedNyam] = useState(null);
@@ -41,9 +41,19 @@ export default function Maps ({ filters }) {
         }
     }, [filters]);
 
+    useEffect( () => {
+        _isPickmode = isPickmode;
+        
+        if(isPickmode === true){
+            map.setCursor("Crosshair");
+        } else if (isPickmode === false) {
+            map.setCursor("Move");
+        }
+    }, [isPickmode]);
+
     return (
         <MapsWrap className="Maps">
-            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam); }} src={mapValues.mapSource} />
+            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam, isPickmode, setPickCoord); }} src={mapValues.mapSource} />
 
             <Map id="map"></Map>
             <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
@@ -92,7 +102,7 @@ const setMarkersVisible = (filters, setIsLoading) => {
     setIsLoading(false);
 }
 
-const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam) => {
+const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam, isPickmode, setPickCoord) => {
     setIsLoading(true);
 
     // set naver.maps.Map
@@ -139,7 +149,7 @@ const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam) => {
         temp.addListener("click", (e) => {
             const targetid = e.overlay["_nmarker_id"];
             const types = mapValues.nyamTypes;
-
+            console.log(e.coord);
             for( let i = 0; i<types.length; i++){
                 const type = types[i];
                 let chk = false;
@@ -163,8 +173,14 @@ const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam) => {
 
     // set eventListener
     map.addListener("click", (e) => {
-        const latlng = e.coord;
-        console.log("lat lng : ", latlng);
+        console.log(_isPickmode);
+        if (_isPickmode===true) {
+            const { x, y } = e.coord;
+            console.log("[Maps] lat lng : ", x, y);
+
+            setPickCoord({x, y});
+        }
+        
     });
     
 
