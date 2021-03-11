@@ -18,6 +18,10 @@ export default function NyamEditor ({ title, nyamEditorModalVisible, setNyamEdit
     function removeItem(index) {
         setMenuItems([ ...menuItems.slice(0,index), ...menuItems.slice(index+1)]);
     }
+    
+    function menuItemOnChange(index, type, value) {
+        setMenuItems([ ...menuItems.slice(0,index), { ...menuItems[index], [type] : value } , ...menuItems.slice(index+1)])
+    }
 
     return (
         <NyamEditorWrap className="NyamEditor">
@@ -43,7 +47,7 @@ export default function NyamEditor ({ title, nyamEditorModalVisible, setNyamEdit
                 {
                     menuItems.map( (item, index) => { 
                         console.log('가즈아', index, item);
-                        return MenuItem(index, item.name, item.price, removeItem);
+                        return MenuItem(index, item.name, item.price, removeItem, menuItemOnChange);
                     })
                 }
                     <Tooltip className="deleteComment" title="메뉴 추가" placement="left">
@@ -95,8 +99,8 @@ function MenuItem(index, name, price, removeItem, menuItemOnChange) {
             <Tooltip className="deleteComment" title="크큭.. 없.앤.다." placement="left">
                 <StyledButton shape="circle" icon={<MinusOutlined />} onClick={(e) => { removeItem(index) }} />
             </Tooltip>
-            <StyledInput placeholder="메뉴 이름" value={name} style={{marginRight:SPACE}} onChange={(e) => {menuItemOnChange(index,"name");}} />
-            <StyledInput placeholder="메뉴 가격" value={price} onChange={(e) => {menuItemOnChange(index, "price");}} />
+            <StyledInput placeholder="메뉴 이름" value={name} style={{marginRight:SPACE}} onChange={(e) => {menuItemOnChange(index,"name", e.target.value);}} />
+            <StyledInput placeholder="메뉴 가격" value={price} onChange={(e) => {menuItemOnChange(index, "price", e.target.value);}} />
         </MenuItemWrap>
     )
 }
