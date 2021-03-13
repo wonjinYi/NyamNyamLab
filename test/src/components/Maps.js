@@ -5,16 +5,18 @@ import axios from "axios";
 
 import styled from "styled-components";
 
+// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 import DataStorage from "../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 
 // imported components ==========================================
 import MapsModal from "./followers/Maps/MapsModal";
-
+import NyamEditor from "./followers/Maps/NyamEditor";
 import Loading from "./atoms/Loading";
 
 // Main Component ===============================================
-console.log("map");
 let map = null;
+
 const mapValues = {
     nyamListSource : DataStorage("NYAM_LIST_SOURCE"),
     nyamTypes : DataStorage("NYAM_TYPES_KEY"),
@@ -30,11 +32,14 @@ const nyams = markersInit();
 const markers = markersInit();
 let _isPickmode = null;
 
-export default function Maps ({ filters, isPickmode, setPickCoord }) {
+export default function Maps ({ filters, isPickmode, setIsPickmode }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [mapsModalVisible, setMapsModalVisible] = useState(false);
     const [selectedNyam, setSelectedNyam] = useState(null);
+    const [pickCoord, setPickCoord] = useState(null); // 새로 추가할 냠의 좌표값. { x : 123, y : 123 }
 
+    const [mapsModalVisible, setMapsModalVisible] = useState(false);
+    const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
+    
     useEffect( () => {
         if ( markers !== null ) {
             setMarkersVisible(filters, setIsLoading);
@@ -53,10 +58,15 @@ export default function Maps ({ filters, isPickmode, setPickCoord }) {
 
     return (
         <MapsWrap className="Maps">
-            <ScriptTag type="text/javascript" onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam, isPickmode, setPickCoord); }} src={mapValues.mapSource} />
+            <ScriptTag 
+                type="text/javascript" src={mapValues.mapSource}
+                onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam, setIsPickmode, setPickCoord, setNyamEditorModalVisible); }} 
+            />
 
             <Map id="map"></Map>
             <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
+            <NyamEditor title={"새로운 냠 만들기"} nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible} pickCoord={pickCoord}/>
+
             <Loading isLoading={isLoading} />
         </MapsWrap>
     );
@@ -102,7 +112,7 @@ const setMarkersVisible = (filters, setIsLoading) => {
     setIsLoading(false);
 }
 
-const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam, isPickmode, setPickCoord) => {
+const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam, setIsPickmode, setPickCoord, setNyamEditorModalVisible) => {
     setIsLoading(true);
 
     // set naver.maps.Map
@@ -173,14 +183,13 @@ const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam, isPickmod
 
     // set eventListener
     map.addListener("click", (e) => {
-        console.log(_isPickmode);
         if (_isPickmode===true) {
             const { x, y } = e.coord;
-            console.log("[Maps] lat lng : ", x, y);
 
             setPickCoord({x, y});
+            setIsPickmode(false);
+            setNyamEditorModalVisible(true);
         }
-        
     });
     
 

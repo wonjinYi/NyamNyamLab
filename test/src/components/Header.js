@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import Menu from "./followers/Header/Menu";
 
 // Main Component ===============================================
-export default function Header ({ setFilters, isPickmode, setIsPickmode, pickCoord }) {
+export default function Header ({ setFilters, isPickmode, setIsPickmode }) {
     return (
         <HeaderWrap className="Header">
             <Logo>냠냠랩(TEST)</Logo>
-            <Menu setFilters={setFilters} isPickmode={isPickmode} setIsPickmode={setIsPickmode} pickCoord={pickCoord} />
+            <Menu setFilters={setFilters} isPickmode={isPickmode} setIsPickmode={setIsPickmode} />
         </HeaderWrap>
     );
 }

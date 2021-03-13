@@ -6,50 +6,42 @@ import { Checkbox, Popover, Button, Tooltip } from "antd";
 import { FilterOutlined, PlusOutlined } from "@ant-design/icons"
 import 'antd/dist/antd.css';
 
-import DataStorage from "../../../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-
 // imported Components ==========================================
-import NyamEditor from "../../atoms/NyamEditor";
+// *
+
+/* ******************************************* */
+// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+import DataStorage from "../../../DataStorage"; 
+const NYAM_TYPES = DataStorage("NYAM_TYPES");
+const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
+// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+/* ******************************************* */
 
 // Main Component ===============================================
-const NYAM_TYPES = DataStorage("NYAM_TYPES"); // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
-
-export default function Menu ({ setFilters, isPickmode, setIsPickmode, pickCoord }) {
+export default function Menu ({ setFilters, setIsPickmode }) {
     const [checked, setChecked] = useState( initChecked(NYAM_TYPES_KEY) );
-    const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
 
     useEffect ( () => { 
         setFilters(checked); 
     }, [checked, setFilters]);
 
-    useEffect ( () => {
-        if(isPickmode === true && pickCoord!==null) {
-            setIsPickmode(false);
-            setNyamEditorModalVisible(true);
-            console.log('[Menu] 받음받음');
-        }
-    }, [pickCoord])
-    
-    
-
     function onChange(e) { setChecked({ ...checked, [e.target.nyamType] : e.target.checked }) }
 
     return (
         <MenuWrap className="Menu">
+            {/* 냠 필터링 */}
             <Popover placement="bottom" title={"냠 필터링"} content={filterContent(onChange, checked)} trigger="click">
                 <Tooltip title="냠 필터링" placement="left">
                     <MenuButton shape="circle" icon={<FilterOutlined />} />
                 </Tooltip>
             </Popover>
 
+            {/* 새로운 냠 */}
             <Popover placement="bottom" title={"새로운 냠 만들기"} content={createNyamContent} trigger="click">
                 <Tooltip title="새로운 냠" placement="right">
-                    <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); console.log('setispickmode : true') }} />
+                    <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); }} />
                 </Tooltip>
             </Popover>
-
-            <NyamEditor title={"새로운 냠 만들기"} nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible} onSubmit={()=>{console.log('submitsubmit')}} />
         </MenuWrap>
     );
 }
