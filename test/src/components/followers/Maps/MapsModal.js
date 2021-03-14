@@ -7,9 +7,12 @@ import { Modal } from 'antd';
 // imported components ==========================================
 import MapsModalInfo from "./MapsModalInfo";
 import MapsModalComment from "./MapsModalComment";
+import Loading from "../../atoms/Loading";
 
 // Main Component ===============================================
-export default function MapsModal ({nyamListSource, selectedNyam, mapsModalVisible, setMapsModalVisible}) {
+export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, mapsModalVisible, setMapsModalVisible}) {
+    const [ isLoading, setIsLoading ] = useState(false);
+
     return (
         selectedNyam !== null
             ?
@@ -21,10 +24,11 @@ export default function MapsModal ({nyamListSource, selectedNyam, mapsModalVisib
                         footer={null}
                     >
                         <ModalContentsWrap>
-                            <MapsModalInfo  selectedNyam={selectedNyam} />
-                            <MapsModalComment nyamListSource={nyamListSource} selectedNyam={selectedNyam} />
+                            <MapsModalInfo nyamListSource={nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} setIsLoading={setIsLoading} setMapsModalVisible={setMapsModalVisible} />
+                            <MapsModalComment nyamListSource={nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} setIsLoading={setIsLoading} />
                         </ModalContentsWrap>
-                        
+
+                        <Loading isLoading={isLoading} />
                     </StyledModal>
                 </MapsModalWrap>
     

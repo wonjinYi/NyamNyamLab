@@ -1,10 +1,7 @@
 import axios from "axios";
 
 export default async function naverMapsSetNyams (map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam) {
-    console.log('setnyam', map);
     // initialize temp variable for states
-    // setMarkers( initWithNyamtype(mapValues.nyamTypes) );
-    // setNyams( initWithNyamtype(mapValues.nyamTypes) );
     const tempNyams = initWithNyamtype(mapValues.nyamTypes);
     const tempMarkers = initWithNyamtype(mapValues.nyamTypes);
 
@@ -43,7 +40,6 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
         });
 
         marker.addListener("click", (e) => {
-            console.log(tempNyams, tempMarkers)
             const targetid = e.overlay["_nmarker_id"];
             const types = mapValues.nyamTypes;
 
@@ -68,44 +64,11 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
     
     setNyams(tempNyams);
     setMarkers(tempMarkers);
-
-    // add Click eventlistener to markers.
-    // const types = mapValues.nyamTypes;
-    // types.forEach( type => { // loop : each type
-    //     tempMarkers[type].forEach ( marker => { // loop : each marker
-    //         addListener("click", (e) => {
-    //             const targetId = e.overlay["_nmarker_id"];
-
-
-    //         });
-    //     });
-    // });
-
-    //////////////////////
-    // tempMarkers.addListener("click", (e) => {
-    //     console.log(nyams, markers)
-    //     const targetid = e.overlay["_nmarker_id"];
-        
-        
-    //     for( let i = 0; i<types.length; i++){
-    //         const type = types[i];
-    //         let chk = false;
-    //         for( let j=0; j<markers[type].length; j++ ){
-    //             if ( targetid === markers[type][j]["_nmarker_id"] ){
-    //                 setSelectedNyam(nyams[type][j]);
-    //                 setMapsModalVisible(true);
-    //                 chk = true;
-    //                 break;
-    //             }
-    //         }
-    //         if (chk) { break; }
-    //     }
-    // });
 }
 
 async function readNyamList (src) {
         const { data } = await axios.get(src);
-        console.log("readNyams", data);
+        //console.log("readNyams", data);
 
         return data;
 }
@@ -118,21 +81,3 @@ function initWithNyamtype (types) {
 
     return obj;
 }
-
-// function handleClick (e) {
-//     const targetid = e.overlay["_nmarker_id"];
-        
-//     for( let i = 0; i<types.length; i++){
-//         const type = types[i];
-//         let chk = false;
-//         for( let j=0; j<markers[type].length; j++ ){
-//             if ( targetid === markers[type][j]["_nmarker_id"] ){
-//                 setSelectedNyam(nyams[type][j]);
-//                 setMapsModalVisible(true);
-//                 chk = true;
-//                 break;
-//             }
-//         }
-//         if (chk) { break; }
-//     }
-// }

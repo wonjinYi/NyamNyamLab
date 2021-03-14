@@ -1,8 +1,6 @@
 // imported Modules =============================================
 import { React, useState, useEffect } from "react";
 import ScriptTag from "react-script-tag";
-import axios from "axios";
-
 import styled from "styled-components";
 
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
@@ -47,7 +45,7 @@ export default function Maps ({ filters, isPickmode, setIsPickmode }) {
         if ( markers !== null ) {
             setMarkersVisible(filters, setIsLoading, markers);
         }
-    }, [filters]);
+    }, [filters, markers]);
 
     useEffect( () => {
         if(isPickmode === true){
@@ -65,7 +63,30 @@ export default function Maps ({ filters, isPickmode, setIsPickmode }) {
         } else if (isPickmode === false) {
             map.setCursor("Move");
         }
-    }, [isPickmode]);
+    }, [isPickmode, setIsPickmode]);
+
+    useEffect( () => {
+        // 모달이 켜있었다면 모달내용 바꿔주기
+        if ( selectedNyam != null ){
+            const { type, id } = selectedNyam;
+            const index = nyams[type].findIndex( nyam => nyam.id === id )
+            setSelectedNyam( nyams[type][index] );
+        }
+    }, [nyams, selectedNyam]);
+
+    async function refreshMaps() {
+        // 기존의 마커 모두 삭제하기
+        for( let arr of Object.values(markers) ){
+            arr.forEach( marker => {
+                marker.setMap(null);
+            });
+        }
+
+        // 다시 만들기
+        await naverMapsSetNyams(map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
+
+        // 이후 useEffect에서 selectedNyam 내용 갱신.
+    }
 
     return (
         <MapsWrap className="Maps">
@@ -80,10 +101,10 @@ export default function Maps ({ filters, isPickmode, setIsPickmode }) {
             />
 
             <Map id="map"></Map>
-            <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
+            <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
             <NyamEditor 
-                title={"새로운 냠 만들기"} pickCoord={pickCoord} setIsLoading={setIsLoading} 
-                nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}  
+                title={"새로운 냠 만들기"} pickCoord={pickCoord} taskType="create" defaultNyamValue={null} 
+                refreshMaps={refreshMaps} nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}  
             />
 
             <Loading isLoading={isLoading} />

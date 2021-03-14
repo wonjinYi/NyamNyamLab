@@ -1,11 +1,14 @@
 // imported Modules =============================================
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import moment from "moment";
 
 import { Modal, Input, TimePicker, Button, Tooltip, Divider, Select } from 'antd';
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
+
+// imported components
+import Loading from "../../atoms/Loading";
 
 /* ******************************************* */
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
@@ -18,13 +21,29 @@ const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
 
 // Main Component ===============================================
 
-const SUMMARY_INIT_VALUE = { name:null, description:null, open:null, close:null, type:null, lat:null, lng:null };
+const SUMMARY_INIT_VALUE = { name:null, description:null, open:null, close:null, type:null, lat:null, lng:null, comment:null };
 const MENUITEM_INIT_VALUE = [ {name:null, price:null} ];
 
-export default function NyamEditor ({ title, pickCoord, setIsLoading, nyamEditorModalVisible, setNyamEditorModalVisible }) {
-
+export default function NyamEditor ({ title, pickCoord, taskType, defaultNyamValue, refreshMaps, nyamEditorModalVisible, setNyamEditorModalVisible }) {
+    const [isLoading, setIsLoading] = useState(false);
+    
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
+
+    useEffect( () => {
+        if(taskType==="edit" && defaultNyamValue!=null){
+            // apply default value to "summary"
+            let tempSummary = {};
+            Object.assign(tempSummary, defaultNyamValue);
+            delete tempSummary.menu;
+            setSummary(tempSummary);
+
+            // apply default value to "menuItems"
+            let tempMenuItems = [];
+            tempMenuItems = ( JSON.parse(defaultNyamValue.menu) ).menu;
+            setMenuItems(tempMenuItems);
+        }
+    }, [defaultNyamValue, taskType]);
 
     // about onChange
     function summaryOnChange(target, value) { 
@@ -43,33 +62,40 @@ export default function NyamEditor ({ title, pickCoord, setIsLoading, nyamEditor
         setSummary(SUMMARY_INIT_VALUE);
         setMenuItems(MENUITEM_INIT_VALUE);
     }
+    
     async function onSubmit(e) { 
         setIsLoading(true);
 
         const data = {};
         Object.assign(data, summary);
-        data.lat = pickCoord.y;
-        data.lng = pickCoord.x;
+        
+        // 요청 데이터 준비
+        if (taskType==="create") {
+            Object.assign(data, { "comment" : JSON.stringify({ "comment" : [] }) } );
+            data.lat = pickCoord.y;
+            data.lng = pickCoord.x;
+        } else if (taskType==="edit") {
 
-        // validating
+        }
+        Object.assign(data, { "menu" : JSON.stringify({ "menu" : menuItems }) } );
+        
+        // 검증
         const keys = Object.keys(data);
         for(let i=0; i<keys.length; i++){
             if(data[keys[i]] === null || data[keys[i]] === ""){ 
-                console.log('통과하지못했음')
+                console.log('통과하지못했음');
+                setIsLoading(false);
                 return; 
             }
         }
-
-        // 제출 : CREATE
-        Object.assign(data, { "menu" : JSON.stringify({ "menu" : menuItems }) } );
-        Object.assign(data, { "comment" : JSON.stringify({ "comment" : [] }) } );
         
-        
+        // 요청
         const strData = JSON.stringify(data);
-        console.log("postpost", strData)
-        const submit = await axios.post(`${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=create`, strData);
-        console.log(submit);
+        await axios.post(`${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=${taskType}`, strData);
 
+        // 리프레시
+        await refreshMaps();
+        setNyamEditorModalVisible(false);
         setIsLoading(false);
     }
 
@@ -119,9 +145,10 @@ export default function NyamEditor ({ title, pickCoord, setIsLoading, nyamEditor
                 
                 <ButtonsWrap>
                     <Button type="link" onClick={clearAll}>모두 지우기</Button>
-                    <Button onClick={onSubmit} style={{marginLeft:"auto"}}>만들기</Button>
+                    <Button onClick={onSubmit} style={{marginLeft:"auto"}}>가즈아</Button>
                 </ButtonsWrap>
                 
+                <Loading isLoading={isLoading} />
             </Modal>
         </NyamEditorWrap>
     );
