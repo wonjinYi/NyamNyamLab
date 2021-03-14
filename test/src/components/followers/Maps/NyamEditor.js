@@ -21,14 +21,13 @@ const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
 const SUMMARY_INIT_VALUE = { name:null, description:null, open:null, close:null, type:null, lat:null, lng:null };
 const MENUITEM_INIT_VALUE = [ {name:null, price:null} ];
 
-export default function NyamEditor ({ title, pickCoord, nyamEditorModalVisible, setNyamEditorModalVisible }) {
+export default function NyamEditor ({ title, pickCoord, setIsLoading, nyamEditorModalVisible, setNyamEditorModalVisible }) {
 
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
     // about onChange
     function summaryOnChange(target, value) { 
-        //console.log(e.target.name, e.target.value)
         setSummary({ ...summary, [target]:value }); 
     }
     function menuItemOnChange(index, type, value) { 
@@ -45,6 +44,8 @@ export default function NyamEditor ({ title, pickCoord, nyamEditorModalVisible, 
         setMenuItems(MENUITEM_INIT_VALUE);
     }
     async function onSubmit(e) { 
+        setIsLoading(true);
+
         const data = {};
         Object.assign(data, summary);
         data.lat = pickCoord.y;
@@ -68,6 +69,8 @@ export default function NyamEditor ({ title, pickCoord, nyamEditorModalVisible, 
         console.log("postpost", strData)
         const submit = await axios.post(`${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=create`, strData);
         console.log(submit);
+
+        setIsLoading(false);
     }
 
     return (

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function naverMapsSetNyams (map, mapValues, markers, setMarkers, nyams, setNyams, setMapsModalVisible, setSelectedNyam) {
+export default async function naverMapsSetNyams (map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam) {
     console.log('setnyam', map);
     // initialize temp variable for states
     // setMarkers( initWithNyamtype(mapValues.nyamTypes) );

@@ -67,26 +67,24 @@ export default function Maps ({ filters, isPickmode, setIsPickmode }) {
         }
     }, [isPickmode]);
 
-    // useEffect(() => {
-    //     console.log("logloglog", markers, nyams);
-    // })
-
     return (
         <MapsWrap className="Maps">
             <ScriptTag 
                 type="text/javascript" src={mapValues.mapSource}
                 onLoad={ async () => { 
                     setIsLoading(true);
-                     map = naverMapsinit(mapValues);
-                    await naverMapsSetNyams(map, mapValues, markers, setMarkers, nyams, setNyams, setMapsModalVisible, setSelectedNyam);
-                    //console.log(nyams, markers);
+                    map = naverMapsinit(mapValues);
+                    await naverMapsSetNyams(map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
                     setIsLoading(false);
                 }} 
             />
 
             <Map id="map"></Map>
             <MapsModal nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} />
-            <NyamEditor title={"새로운 냠 만들기"} nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible} pickCoord={pickCoord}/>
+            <NyamEditor 
+                title={"새로운 냠 만들기"} pickCoord={pickCoord} setIsLoading={setIsLoading} 
+                nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}  
+            />
 
             <Loading isLoading={isLoading} />
         </MapsWrap>
