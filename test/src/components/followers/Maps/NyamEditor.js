@@ -49,7 +49,6 @@ export default function NyamEditor ({ title, pickCoord, nyamEditorModalVisible, 
         Object.assign(data, summary);
         data.lat = pickCoord.y;
         data.lng = pickCoord.x;
-        data.open = data.open;
 
         // validating
         const keys = Object.keys(data);
@@ -161,10 +160,10 @@ const ButtonsWrap = styled.div`
     display : flex;
     `;
 
-const Title = styled.span`
-    font-weight : bold;
-    margin-right : ${SPACE};
-    `;
+// const Title = styled.span`
+//     font-weight : bold;
+//     margin-right : ${SPACE};
+//     `;
 
 // function =====================================================
 // *

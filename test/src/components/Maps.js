@@ -14,6 +14,10 @@ import MapsModal from "./followers/Maps/MapsModal";
 import NyamEditor from "./followers/Maps/NyamEditor";
 import Loading from "./atoms/Loading";
 
+// imported supporters
+import naverMapsinit from "./suppoters/naverMapsInit";
+import naverMapsSetNyams from "./suppoters/naverMapsSetNyams";
+
 // Main Component ===============================================
 let map = null;
 
@@ -28,39 +32,56 @@ const mapValues = {
     zoom : 16,
 };
 
-const nyams = markersInit();
-const markers = markersInit();
-let _isPickmode = null;
-
 export default function Maps ({ filters, isPickmode, setIsPickmode }) {
+    const [nyams, setNyams] = useState(null);
+    const [markers, setMarkers] = useState(null);
+
     const [isLoading, setIsLoading] = useState(false);
     const [selectedNyam, setSelectedNyam] = useState(null);
     const [pickCoord, setPickCoord] = useState(null); // 새로 추가할 냠의 좌표값. { x : 123, y : 123 }
 
     const [mapsModalVisible, setMapsModalVisible] = useState(false);
     const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
-    
+
     useEffect( () => {
         if ( markers !== null ) {
-            setMarkersVisible(filters, setIsLoading);
+            setMarkersVisible(filters, setIsLoading, markers);
         }
     }, [filters]);
 
     useEffect( () => {
-        _isPickmode = isPickmode;
-        
         if(isPickmode === true){
             map.setCursor("Crosshair");
+            const listener = window.naver.maps.Event.addListener(map, 'click', function(e) {
+                if (isPickmode===true) {
+                    const { x, y } = e.coord;
+        
+                    setPickCoord({x, y});
+                    setIsPickmode(false);
+                    setNyamEditorModalVisible(true);
+                    window.naver.maps.Event.removeListener(listener);
+                }
+            });   
         } else if (isPickmode === false) {
             map.setCursor("Move");
         }
     }, [isPickmode]);
 
+    // useEffect(() => {
+    //     console.log("logloglog", markers, nyams);
+    // })
+
     return (
         <MapsWrap className="Maps">
             <ScriptTag 
                 type="text/javascript" src={mapValues.mapSource}
-                onLoad={() => { init(setIsLoading, setMapsModalVisible, setSelectedNyam, setIsPickmode, setPickCoord, setNyamEditorModalVisible); }} 
+                onLoad={ async () => { 
+                    setIsLoading(true);
+                     map = naverMapsinit(mapValues);
+                    await naverMapsSetNyams(map, mapValues, markers, setMarkers, nyams, setNyams, setMapsModalVisible, setSelectedNyam);
+                    //console.log(nyams, markers);
+                    setIsLoading(false);
+                }} 
             />
 
             <Map id="map"></Map>
@@ -84,16 +105,7 @@ const Map = styled.div`
     `;
 
 // function =====================================================
-const reqNyamList = {
-    read : async () => {
-        const { data } = await axios.get(mapValues.nyamListSource);
-        console.log("readNyams", data);
-
-        return data;
-    },
-}
-
-const setMarkersVisible = (filters, setIsLoading) => {
+const setMarkersVisible = (filters, setIsLoading, markers) => {
     setIsLoading(true);
 
     const types = mapValues.nyamTypes; // 정의되어있는 type배열 불러오기
@@ -110,97 +122,4 @@ const setMarkersVisible = (filters, setIsLoading) => {
     });
 
     setIsLoading(false);
-}
-
-const init = async(setIsLoading, setMapsModalVisible, setSelectedNyam, setIsPickmode, setPickCoord, setNyamEditorModalVisible) => {
-    setIsLoading(true);
-
-    // set naver.maps.Map
-    const { center, zoom } = mapValues;
-
-    const mapOptions = {
-        center: new window.naver.maps.LatLng(center.lat, center.lng),
-        zoom: zoom,
-    };
-    map = new window.naver.maps.Map("map", mapOptions);   
-
-    // read nyamList
-    const nyamList = await reqNyamList.read();
-
-    // set markers
-    const org = nyamList.shift(); // organization
-    /*const org_marker = */ new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(org.lat, org.lng),
-        map: map,
-        icon: {
-          url : `img/icons/${org.type}.png`,
-          size: new window.naver.maps.Size(48, 48),
-          origin: new window.naver.maps.Point(0, 0),
-        }
-    });
-
-    nyamList.forEach( item => { // nyam items
-        const temp = new window.naver.maps.Marker({
-            position : new window.naver.maps.LatLng(item.lat, item.lng),
-            map : map,
-            icon : {
-                content: [
-                    '<div>',
-                        '<div style="background-color:rgba(255,255,255,0.8); padding:5px; border-radius:16px; border:1px solid #d9d9d9;">',
-                            `<span>${item.name}</span>`,
-                        '</div>',
-                        `<img src="img/icons/${item.type}.png">`,
-                    '</div>'
-                ].join(''),
-                anchor: new window.naver.maps.Point(16, 48),
-            }
-        });
-
-        temp.addListener("click", (e) => {
-            const targetid = e.overlay["_nmarker_id"];
-            const types = mapValues.nyamTypes;
-            console.log(e.coord);
-            for( let i = 0; i<types.length; i++){
-                const type = types[i];
-                let chk = false;
-
-                for( let j=0; j<markers[type].length; j++ ){
-                    if ( targetid === markers[type][j]["_nmarker_id"] ){
-                        setSelectedNyam(nyams[type][j]);
-                        setMapsModalVisible(true);
-                        chk = true;
-                        break;
-                    }
-                }
-
-                if (chk) { break; }
-            }
-        });
-
-        nyams[item.type].push(item);
-        markers[item.type].push(temp);
-    });
-
-    // set eventListener
-    map.addListener("click", (e) => {
-        if (_isPickmode===true) {
-            const { x, y } = e.coord;
-
-            setPickCoord({x, y});
-            setIsPickmode(false);
-            setNyamEditorModalVisible(true);
-        }
-    });
-    
-
-    setIsLoading(false);
-}
-
-function markersInit () {
-    let obj = {};
-    (mapValues.nyamTypes).forEach( category => {
-        obj[category] = [];
-    });
-
-    return obj;
 }

@@ -21,7 +21,7 @@ export default function MapsModal ({nyamListSource, selectedNyam, mapsModalVisib
                         footer={null}
                     >
                         <ModalContentsWrap>
-                            <MapsModalInfo nyamListSource={nyamListSource} selectedNyam={selectedNyam} />
+                            <MapsModalInfo  selectedNyam={selectedNyam} />
                             <MapsModalComment nyamListSource={nyamListSource} selectedNyam={selectedNyam} />
                         </ModalContentsWrap>
                         

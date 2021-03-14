@@ -1,16 +1,14 @@
 // imported Modules =============================================
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { Modal, Button, List } from "antd";
-import axios from "axios";
-import parser from "yargs-parser";
+import { List } from "antd";
 
 // imported components ==========================================
 import Loading from "../../atoms/Loading";
 
 // Main Component ===============================================
-export default function MapsModalInfo ({ nyamListSource, selectedNyam }) {
+export default function MapsModalInfo ({ selectedNyam }) {
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
 
