@@ -29,7 +29,7 @@ export default function MapsModalInfo ({ selectedNyam }) {
                     footer={null}
                     bordered
                     dataSource={parsedMenu.map( item => ( `${item.name} ${item.price}` ) )}
-                    renderItem={item => <List.Item key={item.index}>{item}</List.Item>}
+                    renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
                     style={{borderRadius:"8px"}}
                 />
                 

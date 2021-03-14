@@ -17,8 +17,8 @@ export default function MapsModalComment ({ nyamListSoruce, selectedNyam }) {
             
             <Comments>
             {
-                commentsData.map( item => (
-                    <Comment content={item} onDelete={onDelete} />
+                commentsData.map( ( item, index ) => (
+                    <Comment key={index} content={item} onDelete={onDelete} />
                 ))
             }
             </Comments>
