@@ -12,9 +12,9 @@ import Loading from "../../atoms/Loading";
 // Main Component ===============================================
 export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, mapsModalVisible, setMapsModalVisible}) {
     const [ isLoading, setIsLoading ] = useState(false);
-
+    console.log(selectedNyam);
     return (
-        selectedNyam !== null
+        selectedNyam != null
             ?
                 <MapsModalWrap className="MapsModal">
                     <StyledModal

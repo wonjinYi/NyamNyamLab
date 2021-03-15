@@ -11,7 +11,7 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
     // set markers
         // organization item
     const org = nyamList.shift(); 
-    /*const org_marker = */ new window.naver.maps.Marker({
+    const org_marker = new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(org.lat, org.lng),
         map: map,
         icon: {
@@ -22,6 +22,7 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
     });
 
         // nyam items
+    let cnt = 0;
     nyamList.forEach( item => { 
         const marker = new window.naver.maps.Marker({
             position : new window.naver.maps.LatLng(item.lat, item.lng),
@@ -60,8 +61,12 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
 
         tempNyams[item.type].push(item);
         tempMarkers[item.type].push(marker);
+
+        cnt++;
     });
     
+    org_marker.setZIndex(cnt); // 회사 마커가 가장 위로 올라오도록
+
     setNyams(tempNyams);
     setMarkers(tempMarkers);
 }
