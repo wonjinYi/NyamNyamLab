@@ -50,7 +50,9 @@ components하위에는 아래와 같은 구조를 적용하였습니다. **이�
 
 
 아이콘(Icons)
+* **한식(korean)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/rice-bowl_3800515)
+* **일식(japan)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/sushi_786954)
+* **중식(China)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/noodles_2518412)
 * **편의점(cvs)** icon made by [Nikita Golubev](https://www.flaticon.com/authors/nikita-golubev) from [www.flaticon.com](https://www.flaticon.com/free-icon/shop_290957)
 * **카페(cafe)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/coffee-cup_284815?related_id=284815&origin=pack)
-* **밥(meal)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/rice-bowl_3800515)
 * **패스트푸드(fastfood)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/hamburger_3635562)

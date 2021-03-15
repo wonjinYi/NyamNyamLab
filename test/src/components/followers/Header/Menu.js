@@ -48,10 +48,10 @@ export default function Menu ({ setFilters, setIsPickmode }) {
 
 function filterContent(onChange, checked) {
     return (
-        <div className="filterContent">
+        <div className="filterContent" styld={{display:"flex", flexDirection:"column"}}>
         {
-            NYAM_TYPES_KEY.map( key => (
-                <Checkbox onChange={onChange} checked={checked[key]} nyamType={key} key={key}>{NYAM_TYPES[key]}</Checkbox>
+            NYAM_TYPES_KEY.map( (key) => (
+                <div><Checkbox onChange={onChange} checked={checked[key]} nyamType={key} key={key}>{NYAM_TYPES[key]}</Checkbox></div>
             ))
         }
         </div>
