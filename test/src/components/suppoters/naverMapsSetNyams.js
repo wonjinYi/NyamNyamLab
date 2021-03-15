@@ -30,7 +30,7 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
                 content: [
                     '<div>',
                         '<div style="background-color:rgba(255,255,255,0.8); padding:5px; border-radius:16px; border:1px solid #d9d9d9;">',
-                            `<span>${item.name}</span>`,
+                            `<span style="white-space:nowrap;">${item.name}</span>`,
                         '</div>',
                         `<img src="img/icons/${item.type}.png">`,
                     '</div>'
