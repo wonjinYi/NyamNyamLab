@@ -44,6 +44,10 @@ const MapsModalWrap = styled.div`
 
 const ModalContentsWrap = styled.div`
     display : flex;
+
+    @media(max-width : 768px){
+        flex-direction : column;
+    }
 `;
 const StyledModal = styled(Modal)`
     min-width : 50%;

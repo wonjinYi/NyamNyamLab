@@ -49,7 +49,7 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam, refreshMa
                     header={null}
                     footer={null}
                     bordered
-                    dataSource={parsedMenu.map( item => ( `${item.name} ${item.price}` ) )}
+                    dataSource={parsedMenu.map( item => ( <div>{item.name} <b>{item.price}</b></div> ) )}
                     renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
                     style={{borderRadius:"8px"}}
                 />
@@ -74,6 +74,11 @@ const MapsModalInfoWrap = styled.div`
 
     flex : 1;
     margin-right : ${"8px"}; 
+
+    @media(max-width : 768px){
+        margin-right : 0;
+        margin-bottom : 8px;
+    }
     `;
 const Tools = styled.div`
     display : flex;

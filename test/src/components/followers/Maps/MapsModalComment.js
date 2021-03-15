@@ -94,6 +94,11 @@ const MapsModalCommentWrap = styled.div`
     padding : 16px;
     border : 1px solid #dbdbdb;
     border-radius : 8px;
+
+    @media(max-width : 768px){
+        width : 100%;
+    }
+
     `;
 
 const Comments = styled.div`
