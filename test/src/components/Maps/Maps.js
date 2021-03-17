@@ -13,8 +13,8 @@ import NyamEditor from "./followers/NyamEditor";
 import Loading from "../atoms/Loading";
 
 // imported supporters
-import naverMapsinit from "../suppoters/naverMapsInit";
-import naverMapsSetNyams from "../suppoters/naverMapsSetNyams";
+import naverMapsinit from "../supporters/naverMapsInit";
+import naverMapsSetNyams from "../supporters/naverMapsSetNyams";
 
 // Main Component ===============================================
 let map = null;
