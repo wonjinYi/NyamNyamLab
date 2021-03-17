@@ -13,24 +13,9 @@ function doGet(e) {
   Logger.log(rawData);
 
   var respond = arrToObj(rawData);
-  Logger.log(respond.length)
-
-  //var rowRange = sheet.getRange(`A13:J13`);
+  Logger.log(respond.length);
+  
   return ContentService.createTextOutput( JSON.stringify(respond) ).setMimeType(ContentService.MimeType.JSON);
-  //return HtmlService.createHtmlOutput( JSON.stringify(respond) );
-}
-
-function test() {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet();
-    var rawSheetData = sheet.getDataRange().getValues();
-
-    var comment ="111111111";
-    var targetId = 7;
-    var targetRow = findRowById(rawSheetData, targetId);
-    Logger.log(targetRow);
-
-      var rowRange = sheet.getRange(`J${targetRow}`);
-      rowRange.setValue(comment);
 }
 
 function doPost(e) {
