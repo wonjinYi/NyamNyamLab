@@ -18,7 +18,7 @@ const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 /* ******************************************* */
 
 // Main Component ===============================================
-export default function Menu ({ setFilters, setIsPickmode }) {
+export default function Tools ({ setFilters, setIsPickmode }) {
     const [checked, setChecked] = useState( initChecked(NYAM_TYPES_KEY) );
 
     useEffect ( () => { 
@@ -28,7 +28,7 @@ export default function Menu ({ setFilters, setIsPickmode }) {
     function onChange(e) { setChecked({ ...checked, [e.target.nyamType] : e.target.checked }) }
 
     return (
-        <MenuWrap className="Menu">
+        <ToolsWrap className="Tools">
             {/* 냠 필터링 */}
             <Popover placement="bottom" title={"냠 필터링"} content={filterContent(onChange, checked)} trigger="click">
                 <Tooltip title="냠 필터링" placement="left">
@@ -42,7 +42,7 @@ export default function Menu ({ setFilters, setIsPickmode }) {
                     <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); }} />
                 </Tooltip>
             </Popover>
-        </MenuWrap>
+        </ToolsWrap>
     );
 }
 
@@ -66,7 +66,7 @@ const createNyamContent = (
 );
     
 // style ========================================================
-const MenuWrap = styled.div`
+const ToolsWrap = styled.div`
     display : flex;
     justify-contents : center;
     align-items : center;

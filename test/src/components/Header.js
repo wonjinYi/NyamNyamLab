@@ -3,14 +3,14 @@ import { React } from 'react';
 import styled from 'styled-components';
 
 // imported components ==========================================
-import Menu from "./followers/Header/Menu";
+import Tools from "./followers/Header/Tools";
 
 // Main Component ===============================================
 export default function Header ({ setFilters, isPickmode, setIsPickmode }) {
     return (
         <HeaderWrap className="Header">
             <Logo>냠냠랩(TEST)</Logo>
-            <Menu setFilters={setFilters} isPickmode={isPickmode} setIsPickmode={setIsPickmode} />
+            <Tools setFilters={setFilters} isPickmode={isPickmode} setIsPickmode={setIsPickmode} />
         </HeaderWrap>
     );
 }
