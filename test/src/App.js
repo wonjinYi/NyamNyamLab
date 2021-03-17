@@ -3,9 +3,9 @@ import { React, useState } from 'react';
 import styled from "styled-components";
 
 // imported components ==========================================
-import Header from "./components/Header";
-import Maps from "./components/Maps";
-import Footer from "./components/Footer";
+import Header from "./components/Header/Header";
+import Maps from "./components/Maps/Maps";
+import Footer from "./components/Footer/Footer";
 
 // Main Component ===============================================
 export default function App() {

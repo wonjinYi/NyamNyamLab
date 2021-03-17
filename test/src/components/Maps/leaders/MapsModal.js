@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { Modal } from 'antd';
 
 // imported components ==========================================
-import MapsModalInfo from "./MapsModalInfo";
-import MapsModalComment from "./MapsModalComment";
+import MapsModalInfo from "../followers/MapsModalInfo";
+import MapsModalComment from "../followers/MapsModalComment";
 import Loading from "../../atoms/Loading";
 
 // Main Component ===============================================

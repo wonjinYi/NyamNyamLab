@@ -3,7 +3,7 @@ import { React } from 'react';
 import styled from 'styled-components';
 
 // imported components ==========================================
-import Tools from "./followers/Header/Tools";
+import Tools from "./followers/Tools";
 
 // Main Component ===============================================
 export default function Header ({ setFilters, isPickmode, setIsPickmode }) {

@@ -4,17 +4,17 @@ import ScriptTag from "react-script-tag";
 import styled from "styled-components";
 
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-import DataStorage from "../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+import DataStorage from "../../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 
 // imported components ==========================================
-import MapsModal from "./followers/Maps/MapsModal";
-import NyamEditor from "./followers/Maps/NyamEditor";
-import Loading from "./atoms/Loading";
+import MapsModal from "./leaders/MapsModal";
+import NyamEditor from "./followers/NyamEditor";
+import Loading from "../atoms/Loading";
 
 // imported supporters
-import naverMapsinit from "./suppoters/naverMapsInit";
-import naverMapsSetNyams from "./suppoters/naverMapsSetNyams";
+import naverMapsinit from "../suppoters/naverMapsInit";
+import naverMapsSetNyams from "../suppoters/naverMapsSetNyams";
 
 // Main Component ===============================================
 let map = null;
