@@ -21,7 +21,7 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam, refreshMa
     return (
         <MapsModalInfoWrap className="MapsModalInfo">
             <Tools>
-                <a href={`https://map.naver.com/v5/search/${selectedNyam.name}`} target="_blank" rel="noreferrer">
+                <a href={`https://map.naver.com/v5/search/${removeSpace(selectedNyam.name)}`} target="_blank" rel="noreferrer">
                     <Tooltip title="네이버지도" placement="top">
                         <Button shape="circle" icon={<QuestionCircleOutlined />} size="normal" style={{marginRight:SPACE}} />
                     </Tooltip>
@@ -112,5 +112,9 @@ async function handleDelete(nyamListSource, selectedNyam, setIsLoading, setMapsM
     await refreshMaps();
     setMapsModalVisible(false);
     setIsLoading(false);
+}
 
+function removeSpace(string) {
+    const str = string.split(' ').join('');
+    return str;
 }
