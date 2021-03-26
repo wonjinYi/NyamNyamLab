@@ -50,8 +50,8 @@ function filterContent(onChange, checked) {
     return (
         <div className="filterContent" styld={{display:"flex", flexDirection:"column"}}>
         {
-            NYAM_TYPES_KEY.map( (key) => (
-                <div><Checkbox onChange={onChange} checked={checked[key]} nyamType={key} key={key}>{NYAM_TYPES[key]}</Checkbox></div>
+            NYAM_TYPES_KEY.map( (type, index) => (
+                <div key={index}><Checkbox onChange={onChange} checked={checked[type]} nyamType={type}>{NYAM_TYPES[type]}</Checkbox></div>
             ))
         }
         </div>
