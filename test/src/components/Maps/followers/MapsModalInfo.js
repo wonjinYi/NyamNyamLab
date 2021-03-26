@@ -10,6 +10,7 @@ import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-desig
 
 // imported components ==========================================
 import NyamEditor from "./NyamEditor";
+import ContentsTable from "../../atoms/ContentsTable";
 
 // Main Component ===============================================
 export default function MapsModalInfo ({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible }) {
@@ -42,18 +43,7 @@ export default function MapsModalInfo ({ nyamListSource, selectedNyam, refreshMa
                 <p style={{marginLeft:"8px"}}>{description}</p>
             </Summary>
 
-            <MenuWrap>
-                <Title>메뉴</Title>
-                <List
-                    size="small"
-                    header={null}
-                    footer={null}
-                    bordered
-                    dataSource={parsedMenu.map( item => ( <div>{item.name} <b>{item.price}</b></div> ) )}
-                    renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-                    style={{borderRadius:"8px"}}
-                />
-            </MenuWrap>
+            <ContentsTable desc={["메뉴","가격"]} dataOrder={["name","price"]} data={parsedMenu} />
 
             <NyamEditor 
                 title="냠 수정하기" pickCoord={null} taskType="edit" defaultNyamValue={selectedNyam} 
@@ -94,6 +84,7 @@ const MenuWrap = styled.div`
     display : flex;
     flex-direction : column;
     `;
+
 
 const Title = styled.p`
     margin : 0;
