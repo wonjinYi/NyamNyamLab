@@ -84,6 +84,8 @@ export default function MapsModalComment ({ nyamListSource, selectedNyam, refres
 }
 
 // style ========================================================
+const BORDER_COLOR = "#dbdbdb";
+
 const MapsModalCommentWrap = styled.div`
     display : flex;
     flex-direction : column;
@@ -92,13 +94,13 @@ const MapsModalCommentWrap = styled.div`
 
     margin-left : auto;
     padding : 16px;
-    border : 1px solid #dbdbdb;
+
+    border : 1px solid ${BORDER_COLOR};
     border-radius : 8px;
 
     @media(max-width : 768px){
         width : 100%;
     }
-
     `;
 
 const Comments = styled.div`
@@ -106,7 +108,9 @@ const Comments = styled.div`
     flex-direction : column;
     align-content : flex-end;
     justify-content : flex-start;
+
     height : 100%;
+
     overflow-y: auto;
     `;
 
@@ -117,9 +121,11 @@ const Form = styled.div`
 
 const EmptyNoti = styled.div`
     display : flex;
-    height : 100%;
     justify-content : center;
     align-items : center;
+
+    height : 100%;
     `;
+
 // function =====================================================
 // *
