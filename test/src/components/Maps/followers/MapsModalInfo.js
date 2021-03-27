@@ -5,7 +5,7 @@ import axios from "axios";
 import styled from 'styled-components';
 
 
-import { Button, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons"
 
 // imported components ==========================================
@@ -103,6 +103,8 @@ async function handleDelete(nyamListSource, selectedNyam, setIsLoading, setMapsM
     await refreshMaps();
     setMapsModalVisible(false);
     setIsLoading(false);
+
+    message.success("냠이 역사의 뒤안길로 사라졌습니다");
 }
 
 function removeSpace(string) {

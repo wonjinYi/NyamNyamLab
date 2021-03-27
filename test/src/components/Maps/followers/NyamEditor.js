@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import moment from "moment";
 
-import { Modal, Input, TimePicker, Button, Tooltip, Divider, Select } from 'antd';
+import { Modal, Input, TimePicker, Button, Divider, Select, message } from 'antd';
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 
 // imported components
@@ -84,6 +84,7 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
         for (let i = 0; i < keys.length; i++) {
             if (data[keys[i]] === null || data[keys[i]] === "") {
                 console.log('통과하지못했음');
+                message.warning("비어있는 정보를 채워넣어주세요!");
                 setIsLoading(false);
                 return;
             }
@@ -98,6 +99,13 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
         await refreshMaps();
         setNyamEditorModalVisible(false);
         setIsLoading(false);
+
+        // 완료메시지
+        if(taskType === "create"){
+            message.success("새로운 냠을 만들었습니다!");
+        } else if (taskType === "edit"){
+            message.success("냠이 수정되었습니다!");
+        }
     }
 
     return (
