@@ -5,7 +5,7 @@ import axios from "axios";
 import styled from 'styled-components';
 
 
-import { List, Button, Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
 import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons"
 
 // imported components ==========================================
