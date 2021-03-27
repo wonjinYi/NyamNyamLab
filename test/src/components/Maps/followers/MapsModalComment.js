@@ -1,5 +1,5 @@
 // imported Modules =============================================
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import axios from "axios";
 
 import styled from 'styled-components';
@@ -11,7 +11,7 @@ import { EditOutlined } from "@ant-design/icons"
 import Comment from "../../atoms/Comment";
 
 // Main Component ===============================================
-export default function MapsModalComment ({ nyamListSource, selectedNyam, refreshMaps, setIsLoading }) {
+export default function MapsModalComment({ nyamListSource, selectedNyam, refreshMaps, setIsLoading }) {
     const [newComment, setNewComment] = useState(null);
     const commentsData = JSON.parse(selectedNyam.comment).comment;
 
@@ -19,18 +19,18 @@ export default function MapsModalComment ({ nyamListSource, selectedNyam, refres
         setIsLoading(true);
 
         // 검증
-        if (newComment==null || newComment===''){ 
+        if (newComment == null || newComment === '') {
             setIsLoading(false);
-            return; 
+            return;
         }
 
         // 요청 데이터 준비`
         const url = `${nyamListSource}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            id : selectedNyam.id,
-            comment : JSON.stringify({ comment : [newComment, ...commentsData ] })
+            id: selectedNyam.id,
+            comment: JSON.stringify({ comment: [newComment, ...commentsData] })
         });
-        
+
         // 요청
         //console.log(data);
         await axios.post(url, data);
@@ -41,16 +41,16 @@ export default function MapsModalComment ({ nyamListSource, selectedNyam, refres
         setIsLoading(false);
     }
 
-    async function onDelete(index) {
+    const onDelete = useCallback(async (index) => {
         setIsLoading(true);
 
         // 요청 데이터 준비
         const url = `${nyamListSource}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            id : selectedNyam.id,
-            comment : JSON.stringify({ comment : [...commentsData.slice(0,index), ...commentsData.slice(index+1)] })
+            id: selectedNyam.id,
+            comment: JSON.stringify({ comment: [...commentsData.slice(0, index), ...commentsData.slice(index + 1)] })
         });
-        
+
         // 요청
         //console.log(data);
         await axios.post(url, data);
@@ -58,26 +58,23 @@ export default function MapsModalComment ({ nyamListSource, selectedNyam, refres
         // 리프레시
         await refreshMaps();
         setIsLoading(false);
-    }
+    }, [nyamListSource, selectedNyam, commentsData, setIsLoading, refreshMaps]);
 
     return (
         <MapsModalCommentWrap className="MapsModalComment">
             <Form>
-                <Input placeholder="새로운 의견을 적어주세요" value={newComment} onChange={(e)=>{setNewComment(e.target.value);}} style={{borderRadius:"8px", marginRight:"4px"}} />
-                <Tooltip className="deleteComment" title="새로운 의견적기" placement="right">
+                <Input placeholder="새로운 의견을 적어주세요" value={newComment} onChange={(e) => { setNewComment(e.target.value); }} style={{ borderRadius: "8px", marginRight: "4px" }} />
+                <Tooltip className="deleteComment" title="쓰기" placement="right">
                     <Button type="primary" shape="circle" icon={<EditOutlined />} size="normal" onClick={onCreate} />
                 </Tooltip>
             </Form>
 
             <Comments>
-            {
-                commentsData.length > 0 
-                ?   commentsData.map( ( item, index ) => (
+                {
+                    commentsData.map((item, index) => (
                         <Comment key={index} index={index} content={item} onDelete={onDelete} />
                     ))
-                
-                :   <EmptyNoti><h1>아무것도 없었다</h1></EmptyNoti>
-            }
+                }
             </Comments>
         </MapsModalCommentWrap>
     );
@@ -96,6 +93,7 @@ const MapsModalCommentWrap = styled.div`
     padding : 16px;
 
     border : 1px solid ${BORDER_COLOR};
+    border-bottom : 12px solid ${BORDER_COLOR};
     border-radius : 8px;
 
     @media(max-width : 768px){
@@ -117,14 +115,6 @@ const Comments = styled.div`
 const Form = styled.div`
     display :flex;
     align-items : center;
-    `;
-
-const EmptyNoti = styled.div`
-    display : flex;
-    justify-content : center;
-    align-items : center;
-
-    height : 100%;
     `;
 
 // function =====================================================
