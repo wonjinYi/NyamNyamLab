@@ -3,11 +3,11 @@ import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { Checkbox, Popover, Button, Tooltip } from "antd";
-import { FilterOutlined, PlusOutlined } from "@ant-design/icons"
+import { FilterOutlined, PlusOutlined, BookOutlined } from "@ant-design/icons"
 import 'antd/dist/antd.css';
 
 // imported Components ==========================================
-// *
+import UpdateNote from "./UpdateNote";
 
 /* ******************************************* */
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
@@ -20,6 +20,7 @@ const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 // Main Component ===============================================
 export default function Tools ({ setFilters, setIsPickmode }) {
     const [checked, setChecked] = useState( initChecked(NYAM_TYPES_KEY) );
+    const [updateNoteModalVisible, setUpdateNoteModalVisible] = useState(false);
 
     useEffect ( () => { 
         setFilters(checked); 
@@ -29,19 +30,28 @@ export default function Tools ({ setFilters, setIsPickmode }) {
 
     return (
         <ToolsWrap className="Tools">
-            {/* 냠 필터링 */}
-            <Popover placement="bottom" title={"냠 필터링"} content={filterContent(onChange, checked)} trigger="click">
-                <Tooltip title="냠 필터링" placement="left">
-                    <MenuButton shape="circle" icon={<FilterOutlined />} />
-                </Tooltip>
-            </Popover>
+            <div className="LeftDiv">
+                {/* 냠 필터링 */}
+                <Popover placement="bottom" title={"냠 필터링"} content={filterContent(onChange, checked)} trigger="click">
+                    <Tooltip title="냠 필터링" placement="left">
+                        <MenuButton shape="circle" icon={<FilterOutlined />} />
+                    </Tooltip>
+                </Popover>
 
-            {/* 새로운 냠 */}
-            <Popover placement="bottom" title={"새로운 냠 만들기"} content={createNyamContent} trigger="click">
-                <Tooltip title="새로운 냠" placement="right">
-                    <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); }} />
+                {/* 새로운 냠 */}
+                <Popover placement="bottom" title={"새로운 냠 만들기"} content={createNyamContent} trigger="click">
+                    <Tooltip title="새로운 냠" placement="right">
+                        <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); }} />
+                    </Tooltip>
+                </Popover>
+            </div>
+
+            <div className="RightDiv" style={{marginLeft:"auto"}} >
+                <Tooltip title="업데이트 노트" placement="right">
+                    <MenuButton shape="circle" icon={<BookOutlined />}  onClick={ () => { setUpdateNoteModalVisible(true); }} />
+                    <UpdateNote updateNoteModalVisible={updateNoteModalVisible} setUpdateNoteModalVisible={setUpdateNoteModalVisible} />
                 </Tooltip>
-            </Popover>
+            </div>
         </ToolsWrap>
     );
 }
@@ -68,10 +78,12 @@ const createNyamContent = (
 // style ========================================================
 const ToolsWrap = styled.div`
     display : flex;
+    flex : 1;
+
     justify-contents : center;
     align-items : center;
 
-    padding : 10px 0px;
+    padding : 10px 10px;
 
     background-color : #333333;
     color : #FFFFFF;
