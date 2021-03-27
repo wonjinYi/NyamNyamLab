@@ -31,7 +31,7 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
     useEffect(() => {
-        if (taskType === "edit" && defaultNyamValue != null) {
+        if (nyamEditorModalVisible === true && taskType === "edit" && defaultNyamValue != null) {
             // apply default value to "summary"
             let tempSummary = {};
             Object.assign(tempSummary, defaultNyamValue);
@@ -43,7 +43,7 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
             tempMenuItems = (JSON.parse(defaultNyamValue.menu)).menu;
             setMenuItems(tempMenuItems);
         }
-    }, [defaultNyamValue, taskType]);
+    }, [nyamEditorModalVisible, defaultNyamValue, taskType]);
 
     // about onChange
     function summaryOnChange(target, value) {
@@ -162,7 +162,7 @@ const StyledInput = styled(Input)`
 
 const StyledButton = styled(Button)`
     margin-right : ${SPACE};
-`;
+    `;
 
 // -- user defined style
 const NyamEditorWrap = styled.div``;
