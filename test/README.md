@@ -16,6 +16,7 @@ index.js
     └─ DataStorage.js (S) : 테스트 용도의 사용자설정 보관소
     └─ Header (B)
         └─ Tools (F)
+            └─ UpdateNote (F)
     └─ Maps (B)
         └─ Loading (A)
         └─ naverMapsInit.js (S)
