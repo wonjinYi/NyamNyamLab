@@ -24,14 +24,18 @@ const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
 const SUMMARY_INIT_VALUE = { name: null, description: null, open: null, close: null, type: null, lat: null, lng: null, comment: null };
 const MENUITEM_INIT_VALUE = [{ name: null, price: null }];
 
-export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValue, refreshMaps, nyamEditorModalVisible, setNyamEditorModalVisible }) {
+export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refreshMaps, setIsPickmode, setMapsModalVisible, nyamEditorModalVisible, setNyamEditorModalVisible }) {
     const [isLoading, setIsLoading] = useState(false);
+    const [resetLock, setResetLock] = useState(false); // 냠에디터를 닫았다 열었을 때, selectedNyam의 내용으로 초기화시킬지. ( false : 초기화함, true : 초기화 안함 )
 
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
+    const title = ( taskType==="create" ? "새로운 냠 만들기" : "냠 수정하기" );
+
     useEffect(() => {
-        if (nyamEditorModalVisible === true && taskType === "edit" && defaultNyamValue != null) {
+        if (resetLock===false && taskType === "edit" && defaultNyamValue != null) {
+            // '냠 수정하기'일 때, 기존 내용들 summary, menuItems상태에 반영해주기.
             // apply default value to "summary"
             let tempSummary = {};
             Object.assign(tempSummary, defaultNyamValue);
@@ -42,8 +46,16 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
             let tempMenuItems = [];
             tempMenuItems = (JSON.parse(defaultNyamValue.menu)).menu;
             setMenuItems(tempMenuItems);
+        } 
+    }, [resetLock, defaultNyamValue, taskType]);
+
+    useEffect( () => {
+        if (nyamEditorModalVisible===true && resetLock===true) {
+            setSummary({...summary, lat:pickCoord.y, lng:pickCoord.x});
+            setResetLock(null);
         }
-    }, [nyamEditorModalVisible, defaultNyamValue, taskType]);
+        
+    }, [pickCoord, nyamEditorModalVisible, resetLock, summary])
 
     // about onChange
     function summaryOnChange(target, value) {
@@ -72,40 +84,51 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
         // 요청 데이터 준비
         if (taskType === "create") {
             Object.assign(data, { "comment": JSON.stringify({ "comment": [] }) });
-            data.lat = pickCoord.y;
-            data.lng = pickCoord.x;
-        } else if (taskType === "edit") {
-
-        }
+        } //else if (taskType === "edit") { }
         Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
 
         // 검증
         const keys = Object.keys(data);
         for (let i = 0; i < keys.length; i++) {
             if (data[keys[i]] === null || data[keys[i]] === "") {
-                console.log('통과하지못했음');
                 message.warning("비어있는 정보를 채워넣어주세요!");
                 setIsLoading(false);
                 return;
             }
         }
 
-        // 요청
-        const strData = JSON.stringify(data);
-        const url = `${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=${taskType}`;
-        await axios.post(url, strData);
+        try {
+            // 요청
+            const strData = JSON.stringify(data);
+            const url = `${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=${taskType}`;
+            await axios.post(url, strData);
 
-        // 리프레시
-        await refreshMaps();
-        setNyamEditorModalVisible(false);
-        setIsLoading(false);
+            // 리프레시
+            await refreshMaps();
+            setNyamEditorModalVisible(false);
+            setIsLoading(false);
 
-        // 완료메시지
-        if(taskType === "create"){
-            message.success("새로운 냠을 만들었습니다!");
-        } else if (taskType === "edit"){
-            message.success("냠이 수정되었습니다!");
+            // 완료메시지
+            if (taskType === "create") { message.success("새로운 냠을 만들었습니다!"); }
+            else if (taskType === "edit") { message.success("냠이 수정되었습니다!"); }
+        } catch {
+            setIsLoading(false);
+            message.error("앗, 뭔가 잘못됐습니다. 다시 시도해주세요", 2.0);
         }
+    }
+
+    function onClose(e){
+        setNyamEditorModalVisible(false);
+        setResetLock(false);
+        if(taskType==="edit"){
+            setMapsModalVisible(true);
+        }
+    }
+
+    function onCoordEdit(e){
+        setResetLock(true);
+        setNyamEditorModalVisible(false);
+        setIsPickmode(true); 
     }
 
     return (
@@ -113,12 +136,16 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
             <Modal
                 title={title}
                 visible={nyamEditorModalVisible}
-                onCancel={() => { setNyamEditorModalVisible(false) }}
+                onCancel={onClose}
                 footer={null}
             >
                 <SummaryWrap>
                     <Divider>개요</Divider>
 
+                    <div style={{ marginLeft: "auto", marginBottom: SPACE }}>
+                        <span style={{marginRight:"8px"}}>{`위도 ${summary.lat} 경도 ${summary.lng}`}</span>
+                        <Button onClick={onCoordEdit} >위치 수정</Button>
+                    </div>
                     <StyledInput name="name" placeholder="가게 이름" value={summary.name} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
                     <StyledInput name="description" placeholder="설명" value={summary.description} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
 
@@ -143,9 +170,9 @@ export default function NyamEditor({ title, pickCoord, taskType, defaultNyamValu
                 <MenusWrap>
                     <Divider>메뉴</Divider>
 
-                    { menuItems.map((item, index) => MenuItem(index, item.name, item.price, addNewMenuItem, removeMenuItem, menuItemOnChange)) }
+                    {menuItems.map((item, index) => MenuItem(index, item.name, item.price, addNewMenuItem, removeMenuItem, menuItemOnChange))}
                     <StyledButton shape="circle" icon={<PlusOutlined />} style={{}} onClick={(e) => { addNewMenuItem(menuItems.length) }} />
-                    
+
                     <Divider />
                 </MenusWrap>
 

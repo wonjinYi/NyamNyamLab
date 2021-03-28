@@ -18,7 +18,7 @@ const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 /* ******************************************* */
 
 // Main Component ===============================================
-export default function Tools ({ setFilters, setIsPickmode }) {
+export default function Tools ({ setFilters, setIsPickmode, setNyamEditorTaskType }) {
     const [checked, setChecked] = useState( initChecked(NYAM_TYPES_KEY) );
     const [updateNoteModalVisible, setUpdateNoteModalVisible] = useState(false);
 
@@ -41,7 +41,12 @@ export default function Tools ({ setFilters, setIsPickmode }) {
                 {/* 새로운 냠 */}
                 <Popover placement="bottom" title={"새로운 냠 만들기"} content={createNyamContent} trigger="click">
                     <Tooltip title="새로운 냠" placement="right">
-                        <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} onClick={ () => { setIsPickmode(true); }} />
+                        <MenuButton shape="circle" icon={<PlusOutlined />} style={{marginLeft:"8px"}} 
+                            onClick={ () => { 
+                                setNyamEditorTaskType("create"); 
+                                setIsPickmode(true); 
+                            }} 
+                        />
                     </Tooltip>
                 </Popover>
             </div>

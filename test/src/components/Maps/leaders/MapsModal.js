@@ -10,8 +10,9 @@ import MapsModalComment from "../followers/MapsModalComment";
 import Loading from "../../atoms/Loading";
 
 // Main Component ===============================================
-export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, mapsModalVisible, setMapsModalVisible}) {
+export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, mapsModalVisible, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType}) {
     const [ isLoading, setIsLoading ] = useState(false);
+
     return (
         selectedNyam != null
             ?
@@ -23,7 +24,10 @@ export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, m
                         footer={null}
                     >
                         <ModalContentsWrap>
-                            <MapsModalInfo nyamListSource={nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} setIsLoading={setIsLoading} setMapsModalVisible={setMapsModalVisible} />
+                            <MapsModalInfo 
+                                nyamListSource={nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} 
+                                setIsLoading={setIsLoading} setMapsModalVisible={setMapsModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible} setNyamEditorTaskType={setNyamEditorTaskType}
+                            />
                             <MapsModalComment nyamListSource={nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} setIsLoading={setIsLoading} />
                         </ModalContentsWrap>
 

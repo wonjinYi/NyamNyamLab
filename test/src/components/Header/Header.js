@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import Tools from "./followers/Tools";
 
 // Main Component ===============================================
-export default function Header ({ setFilters, isPickmode, setIsPickmode }) {
+export default function Header ({ setFilters, setIsPickmode, setNyamEditorTaskType }) {
     return (
         <HeaderWrap className="Header">
             <Logo>냠냠랩(TEST)</Logo>
-            <Tools setFilters={setFilters} isPickmode={isPickmode} setIsPickmode={setIsPickmode} />
+            <Tools setFilters={setFilters} setIsPickmode={setIsPickmode} setNyamEditorTaskType={setNyamEditorTaskType} />
         </HeaderWrap>
     );
 }

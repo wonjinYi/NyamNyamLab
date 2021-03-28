@@ -11,8 +11,8 @@ import NyamEditor from "./NyamEditor";
 import ContentsTable from "../../atoms/ContentsTable";
 
 // Main Component ===============================================
-export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible }) {
-    const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
+export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
+    //const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
 
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
@@ -42,7 +42,9 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
                     </Tooltip>
                 </a>
                 <Tooltip title="수정" placement="top">
-                    <Button shape="circle" icon={<FormOutlined />} size="normal" style={{ marginRight: SPACE }} onClick={(e) => { setNyamEditorModalVisible(true); }} />
+                    {/* <Button shape="circle" icon={<FormOutlined />} size="normal" style={{ marginRight: SPACE }} onClick={(e) => { setNyamEditorModalVisible(true); }} /> */}
+                    <Button shape="circle" icon={<FormOutlined />} size="normal" style={{ marginRight: SPACE }} onClick={(e) => { setNyamEditorTaskType("edit"); setMapsModalVisible(false); setNyamEditorModalVisible(true); }} />
+                    
                 </Tooltip>
                 <Tooltip title="삭제" placement="top">
                     <Button shape="circle" icon={<DeleteOutlined />} size="normal" onClick={(e) => { handleDelete(); }} />
@@ -62,10 +64,10 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
             <ContentsTable desc={["메뉴", "가격"]} dataOrder={["name", "price"]} data={parsedMenu} />
 
             {/* 냠 수정용 에디터 :: 우측상단도구의 '수정'을 클릭하면 표시 */}
-            <NyamEditor
+            {/* <NyamEditor
                 title="냠 수정하기" pickCoord={null} taskType="edit" defaultNyamValue={selectedNyam}
                 refreshMaps={refreshMaps} nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}
-            />
+            /> */}
         </MapsModalInfoWrap>
     );
 }
