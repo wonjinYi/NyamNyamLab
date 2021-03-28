@@ -82,7 +82,7 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
 
 async function readNyamList (src) {
         try {
-            const { data } = await axios.get(`${src}ㅇㄹㅇㄹㅇㄹㅇㄹㅇㄻㄹㄴㅇㄹㄴㅇㄹ`);
+            const { data } = await axios.get(src);
             //console.log("readNyams", data);
             return data;
         } catch {
