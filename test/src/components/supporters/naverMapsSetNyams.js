@@ -1,4 +1,5 @@
 import axios from "axios";
+import {message } from "antd";
 
 export default async function naverMapsSetNyams (map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam) {
     // initialize temp variable for states
@@ -7,6 +8,10 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
 
     // read nyamList
     const nyamList = await readNyamList(mapValues.nyamListSource);
+    if (nyamList===null){
+        message.error("문제가 생겨 데이터를 받아오지 못했습니다. 새로고침을 시도해주세요", 0);
+        return;
+    }
 
     // set markers
         // organization item
@@ -76,10 +81,17 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
 }
 
 async function readNyamList (src) {
-        const { data } = await axios.get(src);
-        //console.log("readNyams", data);
+        try {
+            const { data } = await axios.get(`${src}ㅇㄹㅇㄹㅇㄹㅇㄹㅇㄻㄹㄴㅇㄹㄴㅇㄹ`);
+            //console.log("readNyams", data);
+            return data;
+        } catch {
+            return null;
+        }
+        
+        
 
-        return data;
+        
 }
 
 function initWithNyamtype (types) {
