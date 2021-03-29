@@ -158,10 +158,12 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                 <SummaryWrap>
                     <Divider>개요</Divider>
 
-                    <div style={{ marginLeft: "auto", marginBottom: SPACE }}>
-                        <span style={{marginRight:"8px"}}>{`위도 ${summary.lat} 경도 ${summary.lng}`}</span>
+                    <Coord>
+                        <span style={{marginRight:"8px", textAlign:"center"}}>{`위도 ${summary.lat}`}</span>
+                        <span style={{marginRight:"8px", textAlign:"center"}}>{`경도 ${summary.lng}`}</span>
                         <Button onClick={onCoordEdit} >위치 수정</Button>
-                    </div>
+                    </Coord>
+
                     <StyledInput name="name" placeholder="가게 이름" value={summary.name} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
                     <StyledInput name="description" placeholder="설명" value={summary.description} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
 
@@ -222,6 +224,14 @@ const SummaryWrap = styled.div`
     display : flex;
     flex-direction : column;
     align-items : stretch;
+    `;
+
+const Coord = styled.div`
+    display : flex;
+    justify-content : flex-end;
+    align-items : center;
+
+    margin-bottom : ${SPACE}
     `;
 
 const TimePickersWrap = styled.div`
