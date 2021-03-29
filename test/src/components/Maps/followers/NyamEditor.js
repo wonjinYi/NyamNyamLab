@@ -73,10 +73,10 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
     
 
     // about onChange
-    function summaryOnChange(target, value) {
+    function onChangeSummary(target, value) {
         setSummary({ ...summary, [target]: value });
     }
-    function menuItemOnChange(index, type, value) {
+    function onChangeMenuItems(index, type, value) {
         setMenuItems([...menuItems.slice(0, index), { ...menuItems[index], [type]: value }, ...menuItems.slice(index + 1)]);
     }
 
@@ -164,23 +164,23 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                         <Button onClick={onCoordEdit} >위치 수정</Button>
                     </Coord>
 
-                    <StyledInput name="name" placeholder="가게 이름" value={summary.name} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
-                    <StyledInput name="description" placeholder="설명" value={summary.description} onChange={(e) => { summaryOnChange(e.target.name, e.target.value) }} />
+                    <StyledInput name="name" placeholder="가게 이름" value={summary.name} onChange={(e) => { onChangeSummary(e.target.name, e.target.value) }} />
+                    <StyledInput name="description" placeholder="설명" value={summary.description} onChange={(e) => { onChangeSummary(e.target.name, e.target.value) }} />
 
                     <TimePickersWrap>
                         <TimePicker
                             name="openTime" format="HH:mm" placeholder="문 여는 시간" value={summary.open ? moment(summary.open, "HH:mm") : null}
-                            onChange={(time, timeString) => { summaryOnChange("open", timeString); }} style={{ flexGrow: "1", marginRight: SPACE }}
+                            onChange={(time, timeString) => { onChangeSummary("open", timeString); }} style={{ flexGrow: "1", marginRight: SPACE }}
                             minuteStep={5}
                         />
                         <TimePicker
                             name="closeTime" format="HH:mm" placeholder="문 닫는 시간" value={summary.close ? moment(summary.close, "HH:mm") : null}
-                            onChange={(time, timeString) => { summaryOnChange("close", timeString); }} style={{ flexGrow: "1" }}
+                            onChange={(time, timeString) => { onChangeSummary("close", timeString); }} style={{ flexGrow: "1" }}
                             minuteStep={5}
                         />
                     </TimePickersWrap>
 
-                    <Select placeholder="유형을 골라주세요" value={summary.type} onChange={(value) => { summaryOnChange("type", value); }}>
+                    <Select placeholder="유형을 골라주세요" value={summary.type} onChange={(value) => { onChangeSummary("type", value); }}>
                         {NYAM_TYPES_KEY.map((key, index) => (<Select.Option value={key} key={index}>{NYAM_TYPES[key]}</Select.Option>))}
                     </Select>
                 </SummaryWrap>
@@ -188,7 +188,7 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                 <MenusWrap>
                     <Divider>메뉴</Divider>
 
-                    {menuItems.map((item, index) => MenuItem(index, item.name, item.price, addNewMenuItem, removeMenuItem, menuItemOnChange))}
+                    {menuItems.map((item, index) => MenuItem(index, item.name, item.price, addNewMenuItem, removeMenuItem, onChangeMenuItems))}
                     <StyledButton shape="circle" icon={<PlusOutlined />} style={{}} onClick={(e) => { addNewMenuItem(menuItems.length) }} />
 
                     <Divider />
@@ -253,14 +253,14 @@ const ButtonsWrap = styled.div`
 // *
 
 // 유사 컴포넌트 ================================================
-function MenuItem(index, name, price, addNewMenuItem, removeMenuItem, menuItemOnChange) {
+function MenuItem(index, name, price, addNewMenuItem, removeMenuItem, onChangeMenuItems) {
     return (
         <MenuItemWrap key={index}>
             <StyledButton shape="circle" icon={<PlusOutlined />} style={{}} onClick={(e) => { addNewMenuItem(index); }} />
             <StyledButton shape="circle" icon={<MinusOutlined />} onClick={(e) => { removeMenuItem(index) }} />
 
-            <StyledInput placeholder="메뉴 이름" value={name} style={{ marginRight: SPACE }} onChange={(e) => { menuItemOnChange(index, "name", e.target.value); }} />
-            <StyledInput placeholder="메뉴 가격" value={price} onChange={(e) => { menuItemOnChange(index, "price", e.target.value); }} />
+            <StyledInput placeholder="메뉴 이름" value={name} style={{ marginRight: SPACE }} onChange={(e) => { onChangeMenuItems(index, "name", e.target.value); }} />
+            <StyledInput placeholder="메뉴 가격" value={price} onChange={(e) => { onChangeMenuItems(index, "price", e.target.value); }} />
         </MenuItemWrap>
     )
 }
