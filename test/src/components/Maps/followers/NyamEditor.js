@@ -1,5 +1,5 @@
 // imported Modules =============================================
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import moment from "moment";
@@ -26,19 +26,17 @@ const MENUITEM_INIT_VALUE = [{ name: null, price: null }];
 
 export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refreshMaps, setIsPickmode, setMapsModalVisible, nyamEditorModalVisible, setNyamEditorModalVisible }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [resetLock, setResetLock] = useState(false); // 냠에디터를 닫았다 열었을 때, selectedNyam의 내용으로 초기화시킬지. ( false : 초기화함, true : 초기화 안함 )
+    const [resetLock, setResetLock] = useState(false); // 냠에디터를 닫았다 열었을 때, selectedNyam의 내용으로 초기화시킬지. ( false : 초기화함, true : 초기화 안함, null : 폼 업데이트됨 )
 
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
     const title = ( taskType==="create" ? "새로운 냠 만들기" : "냠 수정하기" );
 
-    useEffect(() => {
-        if (resetLock===false && taskType === "edit" && defaultNyamValue != null) {
-            // '냠 수정하기'일 때, 기존 내용들 summary, menuItems상태에 반영해주기.
+    const initFormData = useCallback( () => {
+        if ( taskType === "edit" && defaultNyamValue != null) {
             // apply default value to "summary"
-            let tempSummary = {};
-            Object.assign(tempSummary, defaultNyamValue);
+            const tempSummary = {...defaultNyamValue};
             delete tempSummary.menu;
             setSummary(tempSummary);
 
@@ -46,9 +44,24 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             let tempMenuItems = [];
             tempMenuItems = (JSON.parse(defaultNyamValue.menu)).menu;
             setMenuItems(tempMenuItems);
-        } 
-    }, [resetLock, defaultNyamValue, taskType]);
+        } else if (taskType==="create") {
+            setSummary({...SUMMARY_INIT_VALUE, lat:pickCoord.y, lng:pickCoord.x});
+            
+            setMenuItems(MENUITEM_INIT_VALUE)
+        }
 
+        setResetLock(null);
+    }, [defaultNyamValue, taskType, pickCoord]);
+
+    // 폼 초기값 지정.
+    useEffect(() => {
+        if (resetLock===false && nyamEditorModalVisible===true) {
+            initFormData();
+            setResetLock(null);
+        }
+    }, [resetLock, nyamEditorModalVisible, initFormData]);
+
+    // 좌표 수정 업데이트.
     useEffect( () => {
         if (nyamEditorModalVisible===true && resetLock===true) {
             setSummary({...summary, lat:pickCoord.y, lng:pickCoord.x});
@@ -56,6 +69,8 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
         }
         
     }, [pickCoord, nyamEditorModalVisible, resetLock, summary])
+
+    
 
     // about onChange
     function summaryOnChange(target, value) {
@@ -126,6 +141,7 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
     }
 
     function onCoordEdit(e){
+        message.info("냠의 새로운 위치를 정해주세요", 5);
         setResetLock(true);
         setNyamEditorModalVisible(false);
         setIsPickmode(true); 

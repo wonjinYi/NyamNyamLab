@@ -1,5 +1,5 @@
 // imported Modules =============================================
-import React, { useState } from 'react';
+import React from 'react';
 import axios from "axios";
 
 import styled from 'styled-components';
@@ -7,12 +7,10 @@ import { Button, message, Tooltip } from "antd";
 import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons"
 
 // imported components ==========================================
-import NyamEditor from "./NyamEditor";
 import ContentsTable from "../../atoms/ContentsTable";
 
 // Main Component ===============================================
 export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
-    //const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
 
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
