@@ -45,7 +45,7 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             tempMenuItems = (JSON.parse(defaultNyamValue.menu)).menu;
             setMenuItems(tempMenuItems);
         } else if (taskType==="create") {
-            setSummary({...SUMMARY_INIT_VALUE, lat:pickCoord.y, lng:pickCoord.x});
+            setSummary({...SUMMARY_INIT_VALUE, lat:pickCoord.y, lng:pickCoord.x, comment:JSON.stringify({ "comment": [] })});
             
             setMenuItems(MENUITEM_INIT_VALUE)
         }
@@ -96,12 +96,6 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
         const data = {};
         Object.assign(data, summary);
 
-        // 요청 데이터 준비
-        if (taskType === "create") {
-            Object.assign(data, { "comment": JSON.stringify({ "comment": [] }) });
-        } //else if (taskType === "edit") { }
-        Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
-
         // 검증
         const keys = Object.keys(data);
         for (let i = 0; i < keys.length; i++) {
@@ -111,7 +105,26 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                 return;
             }
         }
+        
+        for (let item of menuItems){
+            if(item.name==='' || item.price===''){
+                message.warning("비어있는 정보를 채워넣어주세요!");
+                setIsLoading(false);
+                return;
+            }
+        }
 
+        // 요청 데이터 준비
+        if (taskType === "create") {
+            //Object.assign(data, { "comment": JSON.stringify({ "comment": [] }) });
+        } //else if (taskType === "edit") { }
+        Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
+
+        
+        
+
+        console.log(data);
+    
         try {
             // 요청
             const strData = JSON.stringify(data);
@@ -121,13 +134,15 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             // 리프레시
             await refreshMaps();
             setNyamEditorModalVisible(false);
+            setResetLock(false);
             setIsLoading(false);
 
             // 완료메시지
             if (taskType === "create") { message.success("새로운 냠을 만들었습니다!"); }
             else if (taskType === "edit") { message.success("냠이 수정되었습니다!"); }
-        } catch {
+        } catch(err) {
             setIsLoading(false);
+            console.error(err);
             message.error("앗, 뭔가 잘못됐습니다. 다시 시도해주세요", 2.0);
         }
     }
