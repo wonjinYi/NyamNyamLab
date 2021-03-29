@@ -105,7 +105,7 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                 return;
             }
         }
-        
+
         for (let item of menuItems){
             if(item.name==='' || item.price===''){
                 message.warning("비어있는 정보를 채워넣어주세요!");
@@ -119,11 +119,6 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             //Object.assign(data, { "comment": JSON.stringify({ "comment": [] }) });
         } //else if (taskType === "edit") { }
         Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
-
-        
-        
-
-        console.log(data);
     
         try {
             // 요청
