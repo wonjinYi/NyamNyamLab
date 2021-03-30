@@ -31,12 +31,12 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
-    const title = ( taskType==="create" ? "새로운 냠 만들기" : "냠 수정하기" );
+    const title = (taskType === "create" ? "새로운 냠 만들기" : "냠 수정하기");
 
-    const initFormData = useCallback( () => {
-        if ( taskType === "edit" && defaultNyamValue != null) {
+    const initFormData = useCallback(() => {
+        if (taskType === "edit" && defaultNyamValue != null) {
             // apply default value to "summary"
-            const tempSummary = {...defaultNyamValue};
+            const tempSummary = { ...defaultNyamValue };
             delete tempSummary.menu;
             setSummary(tempSummary);
 
@@ -44,9 +44,9 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             let tempMenuItems = [];
             tempMenuItems = (JSON.parse(defaultNyamValue.menu)).menu;
             setMenuItems(tempMenuItems);
-        } else if (taskType==="create") {
-            setSummary({...SUMMARY_INIT_VALUE, lat:pickCoord.y, lng:pickCoord.x, comment:JSON.stringify({ "comment": [] })});
-            
+
+        } else if (taskType === "create") {
+            setSummary({ ...SUMMARY_INIT_VALUE, lat: pickCoord.y, lng: pickCoord.x, comment: JSON.stringify({ "comment": [] }) });
             setMenuItems(MENUITEM_INIT_VALUE)
         }
 
@@ -55,22 +55,22 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
 
     // 폼 초기값 지정.
     useEffect(() => {
-        if (resetLock===false && nyamEditorModalVisible===true) {
+        if (resetLock === false && nyamEditorModalVisible === true) {
             initFormData();
             setResetLock(null);
         }
     }, [resetLock, nyamEditorModalVisible, initFormData]);
 
     // 좌표 수정 업데이트.
-    useEffect( () => {
-        if (nyamEditorModalVisible===true && resetLock===true) {
-            setSummary({...summary, lat:pickCoord.y, lng:pickCoord.x});
+    useEffect(() => {
+        if (nyamEditorModalVisible === true && resetLock === true) {
+            setSummary({ ...summary, lat: pickCoord.y, lng: pickCoord.x });
             setResetLock(null);
         }
-        
+
     }, [pickCoord, nyamEditorModalVisible, resetLock, summary])
 
-    
+
 
     // about onChange
     function onChangeSummary(target, value) {
@@ -97,17 +97,16 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
         Object.assign(data, summary);
 
         // 검증
-        const keys = Object.keys(data);
-        for (let i = 0; i < keys.length; i++) {
-            if (data[keys[i]] === null || data[keys[i]] === "") {
+        for (let property of Object.keys(data)) {
+            if (data[property] === null || data[property] === "") {
                 message.warning("비어있는 정보를 채워넣어주세요!");
                 setIsLoading(false);
                 return;
             }
         }
 
-        for (let item of menuItems){
-            if(item.name==='' || item.price===''){
+        for (let item of menuItems) {
+            if (item.name === '' || item.price === '') {
                 message.warning("비어있는 정보를 채워넣어주세요!");
                 setIsLoading(false);
                 return;
@@ -115,11 +114,8 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
         }
 
         // 요청 데이터 준비
-        if (taskType === "create") {
-            //Object.assign(data, { "comment": JSON.stringify({ "comment": [] }) });
-        } //else if (taskType === "edit") { }
         Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
-    
+
         try {
             // 요청
             const strData = JSON.stringify(data);
@@ -135,26 +131,26 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
             // 완료메시지
             if (taskType === "create") { message.success("새로운 냠을 만들었습니다!"); }
             else if (taskType === "edit") { message.success("냠이 수정되었습니다!"); }
-        } catch(err) {
+        } catch (err) {
             setIsLoading(false);
             console.error(err);
             message.error("앗, 뭔가 잘못됐습니다. 다시 시도해주세요", 2.0);
         }
     }
 
-    function onClose(e){
+    function onClose(e) {
         setNyamEditorModalVisible(false);
         setResetLock(false);
-        if(taskType==="edit"){
+        if (taskType === "edit") {
             setMapsModalVisible(true);
         }
     }
 
-    function onCoordEdit(e){
+    function onCoordEdit(e) {
         message.info("냠의 새로운 위치를 정해주세요", 5);
         setResetLock(true);
         setNyamEditorModalVisible(false);
-        setIsPickmode(true); 
+        setIsPickmode(true);
     }
 
     return (
@@ -169,8 +165,8 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
                     <Divider>개요</Divider>
 
                     <Coord>
-                        <span style={{marginRight:"8px", textAlign:"center"}}>{`위도 ${summary.lat}`}</span>
-                        <span style={{marginRight:"8px", textAlign:"center"}}>{`경도 ${summary.lng}`}</span>
+                        <span style={{ marginRight: "8px", textAlign: "center" }}>{`위도 ${summary.lat}`}</span>
+                        <span style={{ marginRight: "8px", textAlign: "center" }}>{`경도 ${summary.lng}`}</span>
                         <Button onClick={onCoordEdit} >위치 수정</Button>
                     </Coord>
 
