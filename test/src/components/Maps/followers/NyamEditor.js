@@ -22,7 +22,7 @@ const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
 // Main Component ===============================================
 
 const SUMMARY_INIT_VALUE = { name: null, description: null, open: null, close: null, type: null, lat: null, lng: null, comment: null };
-const MENUITEM_INIT_VALUE = [{ name: null, price: null }];
+const MENUITEM_INIT_VALUE = [{ name: '', price: '' }];
 
 export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refreshMaps, setIsPickmode, setMapsModalVisible, nyamEditorModalVisible, setNyamEditorModalVisible }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -86,7 +86,9 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
 
     // about footer buttons.
     function clearAll(e) {
-        setSummary(SUMMARY_INIT_VALUE);
+        const summaryReplace = {...SUMMARY_INIT_VALUE, id:summary.id, lat:summary.lat, lng:summary.lng, comment:summary.comment};
+
+        setSummary(summaryReplace);
         setMenuItems(MENUITEM_INIT_VALUE);
     }
 
