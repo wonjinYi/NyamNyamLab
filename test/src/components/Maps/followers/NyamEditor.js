@@ -204,7 +204,7 @@ export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refr
 
                 <ButtonsWrap>
                     <Button type="link" onClick={clearAll}>모두 지우기</Button>
-                    <Button onClick={onSubmit} style={{ marginLeft: "auto" }}>가즈아</Button>
+                    <Button onClick={onSubmit} style={{ marginLeft: "auto" }}>저장</Button>
                 </ButtonsWrap>
 
                 <Loading isLoading={isLoading} />
