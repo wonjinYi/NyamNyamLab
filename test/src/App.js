@@ -12,7 +12,7 @@ import Footer from "./components/Footer/Footer";
 export default function App() {
   const [filters, setFilters] = useState({});
   const [isPickmode, setIsPickmode] = useState(false); // 현재 '새로운 냠'버튼을 눌러 새로운 위치를 찍는 상태인지
-  const [nyamEditorTaskType, setNyamEditorTaskType] = useState("create"); // 냠에디터 taskType : create / edit
+  const [nyamEditorTaskType, setNyamEditorTaskType] = useState(null); // 냠에디터 taskType : create / edit
 
   // temp temp temp temp temp temp temp temp temp temp
   useEffect( () => {

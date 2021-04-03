@@ -24,7 +24,7 @@ const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
 const SUMMARY_INIT_VALUE = { name: null, description: null, open: null, close: null, type: null, lat: null, lng: null, comment: null };
 const MENUITEM_INIT_VALUE = [{ name: '', price: '' }];
 
-export default function NyamEditor({ pickCoord, taskType, defaultNyamValue, refreshMaps, setIsPickmode, setMapsModalVisible, nyamEditorModalVisible, setNyamEditorModalVisible }) {
+export default function NyamEditor({ taskType, pickCoord, defaultNyamValue, refreshMaps, nyamEditorModalVisible, setNyamEditorModalVisible, setIsPickmode, setMapsModalVisible }) {
     const [isLoading, setIsLoading] = useState(false);
     const [resetLock, setResetLock] = useState(false); // 냠에디터를 닫았다 열었을 때, selectedNyam의 내용으로 초기화시킬지. ( false : 초기화함, true : 초기화 안함, null : 폼 업데이트됨 )
 

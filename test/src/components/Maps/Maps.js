@@ -41,23 +41,24 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
     const [mapsModalVisible, setMapsModalVisible] = useState(false);
     const [nyamEditorModalVisible, setNyamEditorModalVisible] = useState(false);
 
-
+    // 마커 visible 속성 변경
     useEffect(() => {
         if (markers !== null) {
             setMarkersVisible(filters, setIsLoading, markers);
         }
     }, [filters, markers]);
 
+    // 마커위치 선택
     useEffect(() => {
         if (map != null) {
             if (isPickmode === true) {
                 map.setCursor("Crosshair");
-                const listener = window.naver.maps.Event.addListener(map, 'click', function (e) {
+                const listener = window.naver.maps.Event.addListener(map, 'click', function (e) { // 클릭이 들어왔으면
                     if (isPickmode === true) {
-                        const { x, y } = e.coord;
-                        setPickCoord({ x, y });
-                        setIsPickmode(false);
-                        setNyamEditorModalVisible(true);
+                        const { x, y } = e.coord; 
+                        setPickCoord({ x, y }); // 좌표값 저장하고
+                        setIsPickmode(false); // 선택모드 끄고
+                        setNyamEditorModalVisible(true); // 냠에디터 켜
                         window.naver.maps.Event.removeListener(listener);
                     }
                 });
@@ -67,8 +68,8 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         }
     }, [isPickmode, setIsPickmode]);
 
+    // 지도 refreshMaps() 된다음, selectedNyam내용 업데이트
     useEffect(() => {
-        // 모달이 켜있었다면 모달내용 바꿔주기
         if (selectedNyam != null) {
             const { type, id } = selectedNyam;
             const index = nyams[type].findIndex(nyam => nyam.id === id)
@@ -87,7 +88,7 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         // 다시 만들기
         await naverMapsSetNyams(map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
 
-        // 이후 useEffect에서 selectedNyam 내용 갱신.
+        // 이후 바로 위 useEffect에서 selectedNyam 내용 갱신.
     }
 
     return (
@@ -104,14 +105,17 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
             <Map id="map"></Map>
 
             <MapsModal
-                nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} refreshMaps={refreshMaps} mapsModalVisible={mapsModalVisible}
-                setMapsModalVisible={setMapsModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible} setNyamEditorTaskType={setNyamEditorTaskType}
+                nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} 
+                refreshMaps={refreshMaps} 
+                mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} 
+                setNyamEditorModalVisible={setNyamEditorModalVisible} setNyamEditorTaskType={setNyamEditorTaskType}
             />
 
             <NyamEditor
-                pickCoord={pickCoord} taskType={nyamEditorTaskType} defaultNyamValue={selectedNyam}
-                refreshMaps={refreshMaps} setIsPickmode={setIsPickmode} setMapsModalVisible={setMapsModalVisible}
+                taskType={nyamEditorTaskType} pickCoord={pickCoord} defaultNyamValue={selectedNyam}
+                refreshMaps={refreshMaps} 
                 nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}
+                setIsPickmode={setIsPickmode} setMapsModalVisible={setMapsModalVisible}
             />
 
             <Loading isLoading={isLoading} />
@@ -141,7 +145,7 @@ const setMarkersVisible = (filters, setIsLoading, markers) => {
         if (target.length === 0) { return; } // 대상이 비어있으면 바로 함수종료
 
         const dest = filters[type]; // 업데이트 하려고 하는 값
-        if (target[0].getVisible() !== dest) { // target안의 첫번째 마커의 visible속성과, 업데이트 하려고 하는 값이 다르면
+        if (target[0].getVisible() !== dest) { // target안의 첫번째 마커의 visible속성과, 업데이트 하려고 하는 값이 다르면 (어차피 첫번째 마커 visible값이랑, 전체 마커 visible값이랑 똑같을거기 때문)
             target.forEach(marker => { marker.setVisible(dest); }); // 업데이트!
             return;
         }
