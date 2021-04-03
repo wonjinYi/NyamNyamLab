@@ -4,15 +4,17 @@ import axios from "axios";
 
 import styled from 'styled-components';
 
-import { Button, Tooltip, Input } from "antd";
-import { EditOutlined } from "@ant-design/icons"
+import { Button, Tooltip, Input, Popover } from "antd";
+import { EditOutlined, SmileOutlined } from "@ant-design/icons"
+
+import Picker from 'emoji-picker-react';
 
 // imported components ==========================================
 import Comment from "../../atoms/Comment";
 
 // Main Component ===============================================
 export default function MapsModalComment({ nyamListSource, selectedNyam, refreshMaps, setIsLoading }) {
-    const [newComment, setNewComment] = useState(null);
+    const [newComment, setNewComment] = useState('');
     const commentsData = JSON.parse(selectedNyam.comment).comment;
 
     async function onCreate(e) {
@@ -37,7 +39,7 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
 
         // 리프레시
         await refreshMaps();
-        setNewComment(null);
+        setNewComment('');
         setIsLoading(false);
     }
 
@@ -63,7 +65,19 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
     return (
         <MapsModalCommentWrap className="MapsModalComment">
             <Form>
-                <Input placeholder="새로운 의견을 적어주세요" value={newComment} onChange={(e) => { setNewComment(e.target.value); }} style={{ borderRadius: "8px", marginRight: "4px" }} />
+                <Input 
+                    placeholder="새로운 의견을 적어주세요" 
+                    value={newComment} onChange={(e) => { setNewComment(e.target.value); }} 
+                    style={{ borderRadius: "8px", marginRight: "4px" }} 
+                    suffix={
+                        <Popover placement="bottom" title={null} content={<Picker onEmojiClick={(e,obj) => {setNewComment(newComment+obj.emoji)}} />} trigger="click">
+                            <Tooltip title="이모지" placement="top">
+                                <SmileOutlined />
+                            </Tooltip>
+                        </Popover>
+                    }
+                />
+                
                 <Tooltip className="deleteComment" title="쓰기" placement="right">
                     <Button type="primary" shape="circle" icon={<EditOutlined />} size="normal" onClick={onCreate} />
                 </Tooltip>
@@ -101,6 +115,11 @@ const MapsModalCommentWrap = styled.div`
     }
     `;
 
+ const Form = styled.div`
+    display :flex;
+    align-items : center;
+    `;
+
 const Comments = styled.div`
     display : flex;
     flex-direction : column;
@@ -110,11 +129,6 @@ const Comments = styled.div`
     height : 100%;
 
     overflow-y: auto;
-    `;
-
-const Form = styled.div`
-    display :flex;
-    align-items : center;
     `;
 
 // function =====================================================
