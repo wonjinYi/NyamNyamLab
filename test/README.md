@@ -25,7 +25,6 @@ index.js
         └─ NyamEditor (F)
         └─ MapsModal (L)
             └─ MapsModalInfo (F)
-            │   └─ NyamEditor (F)
             └─ MapsModalComment (F)
                 └─ Comment (A) 
     ㄴFooter (B)
@@ -82,6 +81,7 @@ components하위에는 아래와 같은 구조를 적용하였습니다.
 ### 감사히 가져온 것들
 
 아이콘(Icons)
+* **중심(home)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/home_553416)
 * **한식(korean)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/rice-bowl_3800515)
 * **일식(japan)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/sushi_786954)
 * **중식(China)** icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/free-icon/noodles_2518412)
