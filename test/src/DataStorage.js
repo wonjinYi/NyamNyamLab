@@ -10,7 +10,7 @@ export default function DataStorage (key) {
             cafe : "카페",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe"],
-        NYAM_LIST_SOURCE : "https://script.google.com/macros/s/AKfycbyuACrtmBSgcaehSnfbDVhSAMeScTP455Z44h4jtjxRGxJ5UNeVdOEh/exec",
+        NYAM_LIST_SOURCE : "https://script.google.com/macros/s/AKfycbx8v0CH5a_ne_pf90Y1D28O6zA-YOaJgY9G6O_lb-iXqmL0HDF1p6kPDfkuxaz3xLxo/exec",
     }
 
     return data[key];
