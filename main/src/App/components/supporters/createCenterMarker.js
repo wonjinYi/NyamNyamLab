@@ -1,7 +1,8 @@
 export default function createCenterMarker(map, setting) {
     const { lat, lng } = setting;
 
-    const marker = new window.naver.maps.Marker({
+    //const marker = 
+    new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(lat, lng),
         map: map,
         icon: {

@@ -1,10 +1,10 @@
 // imported Modules =============================================
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 
 import styled from 'styled-components';
 import { Button, message, Tooltip } from "antd";
-import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons"
+import { FormOutlined, QuestionCircleOutlined } from "@ant-design/icons"
 
 // imported components ==========================================
 import ContentsTable from "../../atoms/ContentsTable";
@@ -13,17 +13,11 @@ import DeleteBtn from "../../atoms/DeleteBtn";
 // Main Component ===============================================
 export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
     const [deleteConfirm, setDeleteConfirm] = useState(false);
+
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
 
-    useEffect( () => {
-        if(deleteConfirm === true){
-            onDelete();
-            setDeleteConfirm(false);
-        }
-    }, [deleteConfirm]);
-
-    async function onDelete() {
+    const onDelete = useCallback( async () => {
         setIsLoading(true);
 
         const url = `${nyamListSource}?taskTarget=nyam&taskType=delete`;
@@ -36,11 +30,20 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
         setIsLoading(false);
 
         message.success("냠이 역사의 뒤안길로 사라졌습니다");
-    }
+    },[setIsLoading, nyamListSource, refreshMaps, selectedNyam, setMapsModalVisible]);
+
+    useEffect(() => {
+        if (deleteConfirm === true) {
+            onDelete();
+            setDeleteConfirm(false);
+        }
+    }, [deleteConfirm, onDelete]);
+
+    
 
     function openNyamEditor(e) {
-        setNyamEditorTaskType("edit"); 
-        setMapsModalVisible(false); 
+        setNyamEditorTaskType("edit");
+        setMapsModalVisible(false);
         setNyamEditorModalVisible(true);
     }
 
@@ -55,9 +58,9 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
                 </a>
                 <Tooltip title="수정" placement="top">
                     <Button shape="circle" icon={<FormOutlined />} size="normal" style={{ marginRight: SPACE }} onClick={openNyamEditor} />
-                
+
                 </Tooltip>
-                
+
                 <Tooltip title="삭제" placement="top">
                     <DeleteBtn setDeleteConfirm={setDeleteConfirm} />
                     {/* <Button shape="circle" icon={<DeleteOutlined />} size="normal" onClick={(e) => { onDelete(); }} /> */}

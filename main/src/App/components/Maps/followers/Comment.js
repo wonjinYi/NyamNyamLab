@@ -13,7 +13,7 @@ export default function Comment ({ index, content, onDelete }) {
             onDelete(index);
             setDeleteConfirm(false);
         }
-    }, [deleteConfirm]);
+    }, [deleteConfirm, onDelete, index]);
 
     return (
         <CommentWrap className="Comment">

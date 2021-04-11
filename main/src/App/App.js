@@ -1,7 +1,7 @@
 // imported Modules =============================================
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
-import {notification} from "antd";
+      //import {notification} from "antd";
 
 // imported components ==========================================
 import Header from "./components/Header/Header";
