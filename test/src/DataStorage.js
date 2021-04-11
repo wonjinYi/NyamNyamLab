@@ -10,7 +10,8 @@ export default function DataStorage (key) {
             cafe : "카페",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe"],
-        NYAM_LIST_SOURCE : "https://script.google.com/macros/s/AKfycbx8v0CH5a_ne_pf90Y1D28O6zA-YOaJgY9G6O_lb-iXqmL0HDF1p6kPDfkuxaz3xLxo/exec",
+        CONTENT_SOURCE : "https://script.google.com/macros/s/AKfycbwpvR56TiSzf5Rejfz9eqEm_QbvKTnu8b2m40grhbCWbNhycWsij8j3WtNY_P47-0mz/exec",
+        MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
     }
 
     return data[key];

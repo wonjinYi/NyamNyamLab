@@ -3,32 +3,24 @@ import { React, useState, useEffect } from "react";
 import ScriptTag from "react-script-tag";
 import styled from "styled-components";
 
-// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-import DataStorage from "../../DataStorage"; // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-
 // imported components ==========================================
 import MapsModal from "./leaders/MapsModal";
 import NyamEditor from "./followers/NyamEditor";
 import Loading from "../atoms/Loading";
 
 // imported supporters
-import naverMapsinit from "../supporters/naverMapsInit";
-import naverMapsSetNyams from "../supporters/naverMapsSetNyams";
+import DataStorage from "../../DataStorage";
+import initNaverMaps from "../supporters/initNaverMaps";
+import readContents from "../supporters/readContents";
+import createNyamMarkers from "../supporters/createNyamMarkers";
+import createCenterMarker from "../supporters/createCenterMarker";
 
 // Main Component ===============================================
-let map = null;
+let map = null; // naver maps object
 
-const mapValues = {
-    nyamListSource: DataStorage("NYAM_LIST_SOURCE"),
-    nyamTypes: DataStorage("NYAM_TYPES_KEY"),
-    mapSource: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
-    center: {
-        lat: 37.552472,
-        lng: 127.076665,
-    },
-    zoom: 16,
-};
+const CONTENT_SOURCE = DataStorage("CONTENT_SOURCE");
+const MAP_SOURCE = DataStorage("MAP_SOURCE");
+const NYAM_TYPES = DataStorage("NYAM_TYPES_KEY");
 
 export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPickmode, setNyamEditorTaskType }) {
     const [nyams, setNyams] = useState(null);
@@ -55,7 +47,7 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
                 map.setCursor("Crosshair");
                 const listener = window.naver.maps.Event.addListener(map, 'click', function (e) { // 클릭이 들어왔으면
                     if (isPickmode === true) {
-                        const { x, y } = e.coord; 
+                        const { x, y } = e.coord;
                         setPickCoord({ x, y }); // 좌표값 저장하고
                         setIsPickmode(false); // 선택모드 끄고
                         setNyamEditorModalVisible(true); // 냠에디터 켜
@@ -86,34 +78,38 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         }
 
         // 다시 만들기
-        await naverMapsSetNyams(map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
-
+        const { rawNyamList } =  await readContents(CONTENT_SOURCE);
+        createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
         // 이후 바로 위 useEffect에서 selectedNyam 내용 갱신.
     }
 
     return (
         <MapsWrap className="Maps">
             <ScriptTag
-                type="text/javascript" src={mapValues.mapSource}
+                type="text/javascript" src={MAP_SOURCE}
                 onLoad={async () => {
                     setIsLoading(true);
-                    map = naverMapsinit(mapValues);
-                    await naverMapsSetNyams(map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
+
+                    const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
+                    map = initNaverMaps(setting);
+                    createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
+                    createCenterMarker(map, setting);
+
                     setIsLoading(false);
                 }}
             />
             <Map id="map"></Map>
 
             <MapsModal
-                nyamListSource={mapValues.nyamListSource} selectedNyam={selectedNyam} 
-                refreshMaps={refreshMaps} 
-                mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible} 
+                nyamListSource={CONTENT_SOURCE} selectedNyam={selectedNyam}
+                refreshMaps={refreshMaps}
+                mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible}
                 setNyamEditorModalVisible={setNyamEditorModalVisible} setNyamEditorTaskType={setNyamEditorTaskType}
             />
 
             <NyamEditor
                 taskType={nyamEditorTaskType} pickCoord={pickCoord} defaultNyamValue={selectedNyam}
-                refreshMaps={refreshMaps} 
+                refreshMaps={refreshMaps}
                 nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}
                 setIsPickmode={setIsPickmode} setMapsModalVisible={setMapsModalVisible}
             />
@@ -138,7 +134,7 @@ const Map = styled.div`
 const setMarkersVisible = (filters, setIsLoading, markers) => {
     setIsLoading(true);
 
-    const types = mapValues.nyamTypes; // 정의되어있는 type배열 불러오기
+    const types = NYAM_TYPES; // 정의되어있는 type배열 불러오기
 
     types.forEach(type => {
         const target = markers[type]; // markers의 한 type을 대상으로 정함

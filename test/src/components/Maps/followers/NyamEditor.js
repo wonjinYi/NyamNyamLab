@@ -10,16 +10,11 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 // imported components
 import Loading from "../../atoms/Loading";
 
-/* ******************************************* */
-// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+// Main Component ===============================================
 import DataStorage from "../../../DataStorage";
 const NYAM_TYPES = DataStorage("NYAM_TYPES");
 const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
-const NYAM_LIST_SOURCE = DataStorage("NYAM_LIST_SOURCE");
-// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-/* ******************************************* */
-
-// Main Component ===============================================
+const NYAM_LIST_SOURCE = DataStorage("CONTENT_SOURCE");
 
 const SUMMARY_INIT_VALUE = { name: null, description: null, open: null, close: null, type: null, lat: null, lng: null, comment: null };
 const MENUITEM_INIT_VALUE = [{ name: '', price: '' }];

@@ -1,34 +1,12 @@
-import axios from "axios";
-import {message } from "antd";
+import { message } from "antd";
 
-export default async function naverMapsSetNyams (map, mapValues, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam) {
+export default function createNyamMarkers (map, nyamTypes, nyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam) {
     // initialize temp variable for states
-    const tempNyams = initWithNyamtype(mapValues.nyamTypes);
-    const tempMarkers = initWithNyamtype(mapValues.nyamTypes);
-
-    // read nyamList
-    const nyamList = await readNyamList(mapValues.nyamListSource);
-    if (nyamList===null){
-        message.error("문제가 생겨 데이터를 받아오지 못했습니다. 새로고침을 시도해주세요", 0);
-        return;
-    }
-
-    try {
-        // set markers
-            // organization item
-        const org = nyamList.shift(); 
-        const org_marker = new window.naver.maps.Marker({
-            position: new window.naver.maps.LatLng(org.lat, org.lng),
-            map: map,
-            icon: {
-              url : `img/icons/${org.type}.png`,
-              size: new window.naver.maps.Size(48, 48),
-              origin: new window.naver.maps.Point(0, 0),
-            }
-        });
+    const tempNyams = initWithNyamtype(nyamTypes);
+    const tempMarkers = initWithNyamtype(nyamTypes);
     
-            // nyam items
-        let cnt = 0;
+    // create markers
+    try {
         nyamList.forEach( item => { 
             const marker = new window.naver.maps.Marker({
                 position : new window.naver.maps.LatLng(item.lat, item.lng),
@@ -42,17 +20,14 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
                             `<img src="img/icons/svg/${item.type}.svg">`,
                         '</div>'
                     ].join(''),
-                    size : new window.naver.maps.Size(1,500),
-                    scaledSize: new window.naver.maps.Size(395, 79),
     
                     anchor: new window.naver.maps.Point(16, 48),
-                    
                 }
             });
     
             marker.addListener("click", (e) => {
                 const targetid = e.overlay["_nmarker_id"];
-                const types = mapValues.nyamTypes;
+                const types = nyamTypes;
     
                 for( let i = 0; i<types.length; i++){
                     const type = types[i];
@@ -71,12 +46,8 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
     
             tempNyams[item.type].push(item);
             tempMarkers[item.type].push(marker);
-    
-            cnt++;
         });
-        
-        org_marker.setZIndex(cnt); // 회사 마커가 가장 위로 올라오도록
-    
+
         setNyams(tempNyams);
         setMarkers(tempMarkers);
     } catch(err) {
@@ -84,22 +55,8 @@ export default async function naverMapsSetNyams (map, mapValues, setMarkers, set
         console.error(nyamList);
         message.error("데이터를 표시하는 과정에 문제가 생겼습니다. 새로고침을 시도해주세요", 0);
     }
-    
 }
 
-async function readNyamList (src) {
-        try {
-            const { data } = await axios.get(src);
-            //console.log("readNyams", data);
-            return data;
-        } catch {
-            return null;
-        }
-        
-        
-
-        
-}
 
 function initWithNyamtype (types) {
     let obj = {};
