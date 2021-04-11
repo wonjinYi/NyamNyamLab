@@ -1,18 +1,24 @@
 // imported Modules =============================================
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
-import { Button, Tooltip } from "antd";
-import { DeleteOutlined } from "@ant-design/icons"
+// imported Components 
+import DeleteBtn from "../../atoms/DeleteBtn";
 
 // Main Component ===============================================
 export default function Comment ({ index, content, onDelete }) {
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    useEffect( () => {
+        if(deleteConfirm === true){
+            onDelete(index);
+            setDeleteConfirm(false);
+        }
+    }, [deleteConfirm]);
+
     return (
         <CommentWrap className="Comment">
             <Content>{content}</Content>
-            <Tooltip className="deleteComment" title="크큭..없.앤.다." placement="right">
-                <Button index={index} shape="circle" icon={<DeleteOutlined />} style={{}} onClick={(e)=>{onDelete(index)}} />
-            </Tooltip>
+            <DeleteBtn setDeleteConfirm={setDeleteConfirm} />
         </CommentWrap>
     );
 }

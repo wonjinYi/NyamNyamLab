@@ -10,7 +10,7 @@ import { EditOutlined, SmileOutlined } from "@ant-design/icons"
 import Picker from 'emoji-picker-react';
 
 // imported components ==========================================
-import Comment from "../../atoms/Comment";
+import Comment from "./Comment";
 
 // Main Component ===============================================
 export default function MapsModalComment({ nyamListSource, selectedNyam, refreshMaps, setIsLoading }) {

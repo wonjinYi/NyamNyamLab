@@ -1,5 +1,5 @@
 // imported Modules =============================================
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from "axios";
 
 import styled from 'styled-components';
@@ -8,14 +8,22 @@ import { FormOutlined, DeleteOutlined, QuestionCircleOutlined } from "@ant-desig
 
 // imported components ==========================================
 import ContentsTable from "../../atoms/ContentsTable";
+import DeleteBtn from "../../atoms/DeleteBtn";
 
 // Main Component ===============================================
 export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
-
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
 
-    async function handleDelete() {
+    useEffect( () => {
+        if(deleteConfirm === true){
+            onDelete();
+            setDeleteConfirm(false);
+        }
+    }, [deleteConfirm]);
+
+    async function onDelete() {
         setIsLoading(true);
 
         const url = `${nyamListSource}?taskTarget=nyam&taskType=delete`;
@@ -49,8 +57,10 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
                     <Button shape="circle" icon={<FormOutlined />} size="normal" style={{ marginRight: SPACE }} onClick={openNyamEditor} />
                 
                 </Tooltip>
+                
                 <Tooltip title="삭제" placement="top">
-                    <Button shape="circle" icon={<DeleteOutlined />} size="normal" onClick={(e) => { handleDelete(); }} />
+                    <DeleteBtn setDeleteConfirm={setDeleteConfirm} />
+                    {/* <Button shape="circle" icon={<DeleteOutlined />} size="normal" onClick={(e) => { onDelete(); }} /> */}
                 </Tooltip>
             </Tools>
 
