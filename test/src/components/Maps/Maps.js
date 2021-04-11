@@ -78,8 +78,9 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         }
 
         // 다시 만들기
-        const { rawNyamList } =  await readContents(CONTENT_SOURCE);
+        const { rawNyamList, setting } =  await readContents(CONTENT_SOURCE);
         createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
+        createCenterMarker(map, setting);
         // 이후 바로 위 useEffect에서 selectedNyam 내용 갱신.
     }
 
