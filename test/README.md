@@ -13,7 +13,7 @@
 ```
 index.js
 └── App (NyamNyamLab Web Frontend Service)
-    └─ DataStorage.js (S) : 테스트 용도의 사용자설정 보관소
+    └─ DataStorage.js (S) : 냠냠랩 프론트 엔드의 주요 상수값 설정 파일
     └─ Header (B)
         └─ Tools (F)
             └─ UpdateNote (F)
