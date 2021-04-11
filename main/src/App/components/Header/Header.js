@@ -9,7 +9,10 @@ import Tools from "./followers/Tools";
 export default function Header ({ setFilters, setIsPickmode, setNyamEditorTaskType }) {
     return (
         <HeaderWrap className="Header">
-            <Logo>냠냠랩(TEST)</Logo>
+            <Logo>
+                <LogoImg src={"./logo.svg"} alt="logo Image"></LogoImg>
+                <LogoText>냠냠랩</LogoText>
+            </Logo>
             <Tools setFilters={setFilters} setIsPickmode={setIsPickmode} setNyamEditorTaskType={setNyamEditorTaskType} />
         </HeaderWrap>
     );
@@ -26,7 +29,10 @@ const HeaderWrap = styled.div`
     color : #FFFFFF;
     `;
 
-const Logo = styled.h1`
+const LogoImg = styled.img`
+
+    `;
+const LogoText = styled.h1`
     margin : 0;
     padding : 10px 20px;
     color : #FFFFFF;
