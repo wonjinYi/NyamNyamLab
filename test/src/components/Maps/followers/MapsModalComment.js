@@ -4,7 +4,7 @@ import axios from "axios";
 
 import styled from 'styled-components';
 
-import { Button, Tooltip, Input, Popover } from "antd";
+import { Button, Tooltip, Input, Popover, message } from "antd";
 import { EditOutlined, SmileOutlined } from "@ant-design/icons"
 
 import Picker from 'emoji-picker-react';
@@ -40,6 +40,7 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
         // 리프레시
         await refreshMaps();
         setNewComment('');
+        message.success("의견이 작성되었습니다")
         setIsLoading(false);
     }
 
@@ -59,6 +60,7 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
 
         // 리프레시
         await refreshMaps();
+        message.success("의견이 삭제되었습니다")
         setIsLoading(false);
     }, [nyamListSource, selectedNyam, commentsData, setIsLoading, refreshMaps]);
 
