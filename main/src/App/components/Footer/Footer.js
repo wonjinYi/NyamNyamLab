@@ -10,11 +10,8 @@ export default function Footer () {
     return (
         <FooterWrap className="Footer">
             <Group>
-                <Item>Wonjin Yi</Item>
-                <Item><strong>Contact </strong>studioplug17@gmail.com</Item>
-            </Group>
-            <Group style={{marginLeft : "auto",}}>
-                <Item><strong>냠냠램 TEST </strong>조직내부의 폐쇄적인 냠냠거리 공유 서비스</Item>
+                <Item><strong>냠냠랩 </strong> 조직 내부의 냠냠거리 공유 서비스</Item>
+                <Item><strong>Contact </strong> wonjin Yi :: goranimaster17@gmail.com</Item>
             </Group>
         </FooterWrap>
     );
