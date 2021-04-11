@@ -19,14 +19,19 @@ index.js
             └─ UpdateNote (F)
     └─ Maps (B)
         └─ Loading (A)
-        └─ naverMapsInit.js (S)
-        └─ naverMapsSetNyams.js (S)
+        │
+        └─ initNaverMaps.js (S)
+        └─ readContents.js (S)
+        └─ createCenterMarker.js (S)
+        └─ createNyamMarkers.js (S)
         │
         └─ NyamEditor (F)
         └─ MapsModal (L)
             └─ MapsModalInfo (F)
+                └─ DeleteBtn (A)
             └─ MapsModalComment (F)
-                └─ Comment (A) 
+                └─ Comment (F)
+                    └─ DeleteBtn (A)
     ㄴFooter (B)
 ```
 
@@ -68,7 +73,7 @@ components하위에는 아래와 같은 구조를 적용하였습니다.
 * antd
 * axios
 * gh-pages
-* moment : 현재 사실상 개발중단된 패키지임. antd Timepicker에서 해당 패키지를 프롭으로 받길래 일단 넣었음
+* moment
 * react-script-tag
 * prop-types
 
