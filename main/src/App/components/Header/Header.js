@@ -7,7 +7,7 @@ import styled from "styled-components";
 import Tools from "./followers/Tools";
 
 // imported etc resource ========================================
-import LOGO_IMG from "./logo.svg";
+import LOGO_IMG from "../../../logo.svg";
 
 // Main Component ===============================================
 export default function Header ({ setFilters, setIsPickmode, setNyamEditorTaskType }) {
@@ -48,6 +48,7 @@ const LogoImg = styled.img`
     `;
 const LogoText = styled.h1`
     margin : 0;
+    margin-left : 8px;
     color : #FFFFFF;
     font-family: 'Poor Story', cursive;
     `;
