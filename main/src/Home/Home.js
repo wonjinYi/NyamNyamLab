@@ -17,7 +17,7 @@ export default function Home() {
         <HomeWrap className="Home">
             <Header style={{display:"flex", alignItems:"center"}}>
                 <Link to={{pathname:"/app"}}>
-                    <span style={{fontSize:"64px"}}>[임시] 데이터 연구소 지도를 보시려면 여기를 클릭해주세요 [임시]</span>
+                    <span style={{fontSize:"32px"}}>[임시] 데이터 연구소 지도를 보시려면 여기를 클릭해주세요 [임시]</span>
                 </Link>
             </Header>
             
