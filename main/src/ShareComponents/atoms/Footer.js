@@ -11,7 +11,7 @@ export default function Footer () {
         <FooterWrap className="Footer">
             <Group>
                 <Item><strong>냠냠랩 </strong> 조직 내부의 냠냠거리 공유 서비스</Item>
-                <Item><strong>Contact </strong> wonjin Yi :: goranimaster17@gmail.com</Item>
+                <Item><strong>Contact </strong> goranimaster17@gmail.com</Item>
             </Group>
         </FooterWrap>
     );
@@ -20,10 +20,11 @@ export default function Footer () {
 // style ========================================================
 const FooterWrap = styled.div`
     display : flex;
- 
+    
     width : 100%;
     padding : 20px 30px;
 
+    border-top : 1px solid #525252;
     background-color : #333333;
     color : #a1a1a1;
     `; 

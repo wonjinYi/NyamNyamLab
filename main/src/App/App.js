@@ -6,7 +6,7 @@ import styled from "styled-components";
 // imported components ==========================================
 import Header from "./components/Header/Header";
 import Maps from "./components/Maps/Maps";
-import Footer from "./components/Footer/Footer";
+import Footer from "../ShareComponents/atoms/Footer";
 
 // Main Component ===============================================
 export default function App() {
