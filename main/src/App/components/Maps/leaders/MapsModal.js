@@ -7,7 +7,7 @@ import { Modal } from 'antd';
 // imported components ==========================================
 import MapsModalInfo from "../followers/MapsModalInfo";
 import MapsModalComment from "../followers/MapsModalComment";
-import Loading from "../../atoms/Loading";
+import Loading from "../../../../ShareComponents/atoms/Loading";
 
 // Main Component ===============================================
 export default function MapsModal ({nyamListSource, selectedNyam, refreshMaps, mapsModalVisible, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType}) {

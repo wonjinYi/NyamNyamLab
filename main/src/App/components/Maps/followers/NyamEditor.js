@@ -8,7 +8,7 @@ import { Modal, Input, TimePicker, Button, Divider, Select, message } from 'antd
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 
 // imported components
-import Loading from "../../atoms/Loading";
+import Loading from "../../../../ShareComponents/atoms/Loading";
 
 // Main Component ===============================================
 import DataStorage from "../../../DataStorage";

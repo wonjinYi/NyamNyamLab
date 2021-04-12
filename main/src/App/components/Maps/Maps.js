@@ -6,7 +6,7 @@ import styled from "styled-components";
 // imported components ==========================================
 import MapsModal from "./leaders/MapsModal";
 import NyamEditor from "./followers/NyamEditor";
-import Loading from "../atoms/Loading";
+import Loading from "../../../ShareComponents/atoms/Loading";
 
 // imported supporters
 import DataStorage from "../../DataStorage";
