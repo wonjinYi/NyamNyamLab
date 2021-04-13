@@ -9,7 +9,7 @@ import NyamEditor from "./followers/NyamEditor";
 import Loading from "../../../ShareComponents/atoms/Loading";
 
 // imported supporters ==========================================
-import DataStorage from "../../DataStorage";
+import DataStorage from "../../../DataStorage";
 import initNaverMaps from "../supporters/initNaverMaps";
 import readContents from "../supporters/readContents";
 import createNyamMarkers from "../supporters/createNyamMarkers";
@@ -91,7 +91,7 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
                 onLoad={async () => {
                     setIsLoading(true);
 
-                    const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
+                    //const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
                     map = initNaverMaps(setting);
                     createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
                     createCenterMarker(map, setting);

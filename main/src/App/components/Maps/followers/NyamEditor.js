@@ -11,7 +11,7 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 import Loading from "../../../../ShareComponents/atoms/Loading";
 
 // Main Component ===============================================
-import DataStorage from "../../../DataStorage";
+import DataStorage from "../../../../DataStorage";
 const NYAM_TYPES = DataStorage("NYAM_TYPES");
 const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 const NYAM_LIST_SOURCE = DataStorage("CONTENT_SOURCE");

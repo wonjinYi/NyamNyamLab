@@ -11,7 +11,7 @@ import UpdateNote from "./UpdateNote";
 
 /* ******************************************* */
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
-import DataStorage from "../../../DataStorage"; 
+import DataStorage from "../../../../DataStorage"; 
 const NYAM_TYPES = DataStorage("NYAM_TYPES");
 const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
