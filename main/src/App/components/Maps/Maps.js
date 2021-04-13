@@ -8,7 +8,7 @@ import MapsModal from "./leaders/MapsModal";
 import NyamEditor from "./followers/NyamEditor";
 import Loading from "../../../ShareComponents/atoms/Loading";
 
-// imported supporters
+// imported supporters ==========================================
 import DataStorage from "../../DataStorage";
 import initNaverMaps from "../supporters/initNaverMaps";
 import readContents from "../supporters/readContents";
@@ -78,7 +78,7 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         }
 
         // 다시 만들기
-        const { rawNyamList, setting } =  await readContents(CONTENT_SOURCE);
+        const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
         createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
         createCenterMarker(map, setting);
         // 이후 바로 위 useEffect에서 selectedNyam 내용 갱신.
@@ -132,7 +132,7 @@ const Map = styled.div`
     `;
 
 // function =====================================================
-const setMarkersVisible = (filters, setIsLoading, markers) => {
+function setMarkersVisible(filters, setIsLoading, markers) {
     setIsLoading(true);
 
     const types = NYAM_TYPES; // 정의되어있는 type배열 불러오기
