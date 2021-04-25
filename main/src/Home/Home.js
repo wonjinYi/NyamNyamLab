@@ -1,7 +1,7 @@
 // imported Modules =============================================
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import { GithubOutlined } from "@ant-design/icons"
 import styled from 'styled-components';
 
@@ -15,6 +15,15 @@ import Footer from "../ShareComponents/atoms/Footer";
 import LogoImage from "../logo.svg";
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect( () => {
+        notification.open({
+            message: '기존에 떠있던 지도로 가기',
+            description:'기존에 떠있던 지도를 보시려면 "연구소 이름"칸에 "전국고라니협회"를 입력하고 ENTER를 눌러주세요! (공지기간 ~5.10)',
+            duration : 0,
+        });
+    }, []);
+    
 
     return (
         <HomeWrap className="Home">
