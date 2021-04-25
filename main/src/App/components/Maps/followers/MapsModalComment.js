@@ -13,9 +13,10 @@ import Picker from 'emoji-picker-react';
 import Comment from "./Comment";
 
 // Main Component ===============================================
-export default function MapsModalComment({ nyamListSource, selectedNyam, refreshMaps, setIsLoading }) {
+export default function MapsModalComment({ labAccessInfo, selectedNyam, refreshMaps, setIsLoading }) {
     const [newComment, setNewComment] = useState('');
     const commentsData = JSON.parse(selectedNyam.comment).comment;
+    const { accessManagerUrl, labId } = labAccessInfo;
 
     async function onCreate(e) {
         setIsLoading(true);
@@ -27,15 +28,17 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
         }
 
         // 요청 데이터 준비`
-        const url = `${nyamListSource}?taskTarget=comment&taskType=edit`;
+        const url = `${accessManagerUrl}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            id: selectedNyam.id,
-            comment: JSON.stringify({ comment: [newComment, ...commentsData] })
+            nyam : {
+                id: selectedNyam.id,
+                comment: JSON.stringify({ comment: [newComment, ...commentsData] }),
+            },
+            labId : labId,
         });
 
         // 요청
-        //console.log(data);
-        await axios.post(url, data);
+        await axios.post(url, data);  
 
         // 리프레시
         await refreshMaps();
@@ -48,38 +51,40 @@ export default function MapsModalComment({ nyamListSource, selectedNyam, refresh
         setIsLoading(true);
 
         // 요청 데이터 준비
-        const url = `${nyamListSource}?taskTarget=comment&taskType=edit`;
+        const url = `${accessManagerUrl}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            id: selectedNyam.id,
-            comment: JSON.stringify({ comment: [...commentsData.slice(0, index), ...commentsData.slice(index + 1)] })
+            nyam : {
+                id: selectedNyam.id,
+                comment: JSON.stringify({ comment: [...commentsData.slice(0, index), ...commentsData.slice(index + 1)] }),
+            },
+            labId : labId,
         });
 
         // 요청
-        //console.log(data);
         await axios.post(url, data);
 
         // 리프레시
         await refreshMaps();
         message.success("의견이 삭제되었습니다")
         setIsLoading(false);
-    }, [nyamListSource, selectedNyam, commentsData, setIsLoading, refreshMaps]);
+    }, [accessManagerUrl, labId, selectedNyam, commentsData, setIsLoading, refreshMaps]);
 
     return (
         <MapsModalCommentWrap className="MapsModalComment">
             <Form>
-                <Input 
-                    placeholder="새로운 의견을 적어주세요" 
-                    value={newComment} onChange={(e) => { setNewComment(e.target.value); }} 
-                    style={{ borderRadius: "8px", marginRight: "4px" }} 
+                <Input
+                    placeholder="새로운 의견을 적어주세요"
+                    value={newComment} onChange={(e) => { setNewComment(e.target.value); }}
+                    style={{ borderRadius: "8px", marginRight: "4px" }}
                     suffix={
-                        <Popover placement="bottom" title={null} content={<Picker onEmojiClick={(e,obj) => {setNewComment(newComment+obj.emoji)}} />} trigger="click">
+                        <Popover placement="bottom" title={null} content={<Picker onEmojiClick={(e, obj) => { setNewComment(newComment + obj.emoji) }} />} trigger="click">
                             <Tooltip title="이모지" placement="top">
                                 <SmileOutlined />
                             </Tooltip>
                         </Popover>
                     }
                 />
-                
+
                 <Tooltip className="deleteComment" title="쓰기" placement="right">
                     <Button type="primary" shape="circle" icon={<EditOutlined />} size="normal" onClick={onCreate} />
                 </Tooltip>
@@ -117,7 +122,7 @@ const MapsModalCommentWrap = styled.div`
     }
     `;
 
- const Form = styled.div`
+const Form = styled.div`
     display :flex;
     align-items : center;
     `;

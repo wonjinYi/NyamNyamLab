@@ -14,15 +14,15 @@ import initNaverMaps from "../supporters/initNaverMaps";
 import readContents from "../supporters/readContents";
 import createNyamMarkers from "../supporters/createNyamMarkers";
 import createCenterMarker from "../supporters/createCenterMarker";
+import { message } from "antd";
 
 // Main Component ===============================================
 let map = null; // naver maps object
 
-const CONTENT_SOURCE = DataStorage("CONTENT_SOURCE");
 const MAP_SOURCE = DataStorage("MAP_SOURCE");
 const NYAM_TYPES = DataStorage("NYAM_TYPES_KEY");
 
-export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPickmode, setNyamEditorTaskType }) {
+export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPickmode, setNyamEditorTaskType, labAccessInfo }) {
     const [nyams, setNyams] = useState(null);
     const [markers, setMarkers] = useState(null);
 
@@ -78,7 +78,7 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
         }
 
         // 다시 만들기
-        const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
+        const { rawNyamList, setting } = await readContents(labAccessInfo);
         createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
         createCenterMarker(map, setting);
         // 이후 바로 위 useEffect에서 selectedNyam 내용 갱신.
@@ -90,26 +90,33 @@ export default function Maps({ filters, isPickmode, nyamEditorTaskType, setIsPic
                 type="text/javascript" src={MAP_SOURCE}
                 onLoad={async () => {
                     setIsLoading(true);
-
-                    //const { rawNyamList, setting } = await readContents(CONTENT_SOURCE);
+                    const contents = await readContents(labAccessInfo);
+                    if (!contents) {
+                        setIsLoading(false);
+                        return;
+                    }
+                    const { rawNyamList, setting } = contents;
+                    
                     map = initNaverMaps(setting);
                     createNyamMarkers(map, NYAM_TYPES, rawNyamList, setMarkers, setNyams, setMapsModalVisible, setSelectedNyam);
                     createCenterMarker(map, setting);
-
+                    
+                    message.destroy();
+                    message.success('연구소의 모든 내용을 잘 불러왔어요!')
                     setIsLoading(false);
                 }}
             />
             <Map id="map"></Map>
 
             <MapsModal
-                nyamListSource={CONTENT_SOURCE} selectedNyam={selectedNyam}
+                labAccessInfo={labAccessInfo} selectedNyam={selectedNyam}
                 refreshMaps={refreshMaps}
                 mapsModalVisible={mapsModalVisible} setMapsModalVisible={setMapsModalVisible}
                 setNyamEditorModalVisible={setNyamEditorModalVisible} setNyamEditorTaskType={setNyamEditorTaskType}
             />
 
             <NyamEditor
-                taskType={nyamEditorTaskType} pickCoord={pickCoord} defaultNyamValue={selectedNyam}
+                labAccessInfo={labAccessInfo} taskType={nyamEditorTaskType} pickCoord={pickCoord} defaultNyamValue={selectedNyam}
                 refreshMaps={refreshMaps}
                 nyamEditorModalVisible={nyamEditorModalVisible} setNyamEditorModalVisible={setNyamEditorModalVisible}
                 setIsPickmode={setIsPickmode} setMapsModalVisible={setMapsModalVisible}

@@ -53,7 +53,12 @@ export default function createNyamMarkers (map, nyamTypes, nyamList, setMarkers,
     } catch(err) {
         console.error(err);
         console.error(nyamList);
-        message.error("데이터를 표시하는 과정에 문제가 생겼습니다. 새로고침을 시도해주세요", 0);
+        message.error({
+            content : '데이터를 표시하는 과정에 문제가 생겼습니다. 새로고침을 시도해주세요',
+            duration : 0,
+            key : 'createNyamMakers_01',
+            onClick : (e)=>{message.destroy('createNyamMakers_01');},
+        });
     }
 }
 

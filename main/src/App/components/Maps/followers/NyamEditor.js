@@ -14,18 +14,18 @@ import Loading from "../../../../ShareComponents/atoms/Loading";
 import DataStorage from "../../../../DataStorage";
 const NYAM_TYPES = DataStorage("NYAM_TYPES");
 const NYAM_TYPES_KEY = DataStorage("NYAM_TYPES_KEY");
-const NYAM_LIST_SOURCE = DataStorage("CONTENT_SOURCE");
 
 const SUMMARY_INIT_VALUE = { name: null, description: null, open: null, close: null, type: null, lat: null, lng: null, comment: null };
 const MENUITEM_INIT_VALUE = [{ name: '', price: '' }];
 
-export default function NyamEditor({ taskType, pickCoord, defaultNyamValue, refreshMaps, nyamEditorModalVisible, setNyamEditorModalVisible, setIsPickmode, setMapsModalVisible }) {
+export default function NyamEditor({ labAccessInfo, taskType, pickCoord, defaultNyamValue, refreshMaps, nyamEditorModalVisible, setNyamEditorModalVisible, setIsPickmode, setMapsModalVisible }) {
     const [isLoading, setIsLoading] = useState(false);
     const [resetLock, setResetLock] = useState(false); // 냠에디터를 닫았다 열었을 때, selectedNyam의 내용으로 초기화시킬지. ( false : 초기화함, true : 초기화 안함, null : 폼 업데이트됨 )
 
     const [summary, setSummary] = useState(SUMMARY_INIT_VALUE);
     const [menuItems, setMenuItems] = useState(MENUITEM_INIT_VALUE);
 
+    const { accessManagerUrl, labId } = labAccessInfo;
     const title = (taskType === "create" ? "새로운 냠 만들기" : "냠 수정하기");
 
     const initFormData = useCallback(() => {
@@ -90,12 +90,12 @@ export default function NyamEditor({ taskType, pickCoord, defaultNyamValue, refr
     async function onSubmit(e) {
         setIsLoading(true);
 
-        const data = {};
-        Object.assign(data, summary);
-
+        const nyam = {};
+        Object.assign(nyam, summary);
+        
         // 검증
-        for (let property of Object.keys(data)) {
-            if (data[property] === null || data[property] === "") {
+        for (let property of Object.keys(nyam)) {
+            if (nyam[property] === null || nyam[property] === "") {
                 message.warning("비어있는 정보를 채워넣어주세요!");
                 setIsLoading(false);
                 return;
@@ -111,13 +111,18 @@ export default function NyamEditor({ taskType, pickCoord, defaultNyamValue, refr
         }
 
         // 요청 데이터 준비
-        Object.assign(data, { "menu": JSON.stringify({ "menu": menuItems }) });
-
+        Object.assign(nyam, { "menu": JSON.stringify({ "menu": menuItems }) });
+        
         try {
             // 요청
-            const strData = JSON.stringify(data);
-            const url = `${NYAM_LIST_SOURCE}?taskTarget=nyam&taskType=${taskType}`;
-            await axios.post(url, strData);
+            const rawData = {
+                nyam : nyam,
+                labId : labId,
+            };
+            const data = JSON.stringify(rawData);
+            console.log(rawData);
+            const url = `${accessManagerUrl}?taskTarget=nyam&taskType=${taskType}`;
+            await axios.post(url, data);
 
             // 리프레시
             await refreshMaps();

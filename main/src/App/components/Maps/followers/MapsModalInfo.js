@@ -11,17 +11,23 @@ import ContentsTable from "../../atoms/ContentsTable";
 import DeleteBtn from "../../atoms/DeleteBtn";
 
 // Main Component ===============================================
-export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
+export default function MapsModalInfo({ labAccessInfo, selectedNyam, refreshMaps, setIsLoading, setMapsModalVisible, setNyamEditorModalVisible, setNyamEditorTaskType }) {
     const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+    const { accessManagerUrl, labId } = labAccessInfo;
 
     const { open, close, description, menu } = selectedNyam;
     const parsedMenu = JSON.parse(menu).menu;
 
-    const onDelete = useCallback( async () => {
+    const onDelete = useCallback(async () => {
         setIsLoading(true);
 
-        const url = `${nyamListSource}?taskTarget=nyam&taskType=delete`;
-        const data = JSON.stringify(selectedNyam);
+
+        const url = `${accessManagerUrl}?taskTarget=nyam&taskType=delete`;
+        const data = JSON.stringify({
+            nyam: selectedNyam,
+            labId: labId,
+        });
 
         await axios.post(url, data);
 
@@ -30,7 +36,7 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
         setIsLoading(false);
 
         message.success("냠이 역사의 뒤안길로 사라졌습니다");
-    },[setIsLoading, nyamListSource, refreshMaps, selectedNyam, setMapsModalVisible]);
+    }, [setIsLoading, accessManagerUrl, labId, refreshMaps, selectedNyam, setMapsModalVisible]);
 
     useEffect(() => {
         if (deleteConfirm === true) {
@@ -39,7 +45,7 @@ export default function MapsModalInfo({ nyamListSource, selectedNyam, refreshMap
         }
     }, [deleteConfirm, onDelete]);
 
-    
+
 
     function openNyamEditor(e) {
         setNyamEditorTaskType("edit");

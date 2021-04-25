@@ -1,6 +1,6 @@
 // imported Modules =============================================
 import React from 'react';
-import { HashRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import styled from 'styled-components';
 
 // imported components ==========================================
@@ -11,10 +11,10 @@ import App from "./App/App";
 export default function NyamNyamLab() {
     return (
         <NyamNyamLabWrap className="NyamNyamLab">
-            <HashRouter>
+            <BrowserRouter>
                 <Route path="/" exact={true} component={Home}/>
                 <Route path="/app" component={App} />
-            </HashRouter>
+            </BrowserRouter>
         </NyamNyamLabWrap>
     );
 }

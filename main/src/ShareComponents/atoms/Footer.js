@@ -22,7 +22,7 @@ const FooterWrap = styled.div`
     display : flex;
     
     width : 100%;
-    padding : 20px 30px;
+    padding : 10px 20px;
 
     border-top : 1px solid #525252;
     background-color : #333333;

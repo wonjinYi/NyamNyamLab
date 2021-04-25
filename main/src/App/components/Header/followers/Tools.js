@@ -3,7 +3,7 @@ import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { Checkbox, Popover, Button, Tooltip } from "antd";
-import { FilterOutlined, PlusOutlined, BookOutlined } from "@ant-design/icons"
+import { FilterOutlined, PlusOutlined, BookOutlined, SettingOutlined } from "@ant-design/icons"
 import 'antd/dist/antd.css';
 
 // imported Components ==========================================
@@ -51,11 +51,12 @@ export default function Tools ({ setFilters, setIsPickmode, setNyamEditorTaskTyp
                 </Popover>
             </div>
 
-            <div className="RightDiv" style={{marginLeft:"auto"}} >
+            <div className="RightDiv" style={{marginLeft:"auto", display : 'flex'}} >
                 <Tooltip title="업데이트 노트" placement="right">
                     <MenuButton shape="circle" icon={<BookOutlined />}  onClick={ () => { setUpdateNoteModalVisible(true); }} />
                     <UpdateNote updateNoteModalVisible={updateNoteModalVisible} setUpdateNoteModalVisible={setUpdateNoteModalVisible} />
                 </Tooltip>
+                <MenuButton shape="circle" icon={<SettingOutlined />}  style={{marginLeft:"8px"}} disabled/>
             </div>
         </ToolsWrap>
     );
