@@ -120,7 +120,6 @@ export default function NyamEditor({ labAccessInfo, taskType, pickCoord, default
                 labId : labId,
             };
             const data = JSON.stringify(rawData);
-            console.log(rawData);
             const url = `${accessManagerUrl}?taskTarget=nyam&taskType=${taskType}`;
             await axios.post(url, data);
 
