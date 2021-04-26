@@ -16,7 +16,7 @@ const KEY = ['id', 'labName', 'labId', 'routePassword'];
 const KEY_INDEX_NUM = { id: 0, labName: 1, labId: 2, routePassword: 3 };
 const KEY_INDEX_COL = { id: 'A', labName: 'B', labId: 'C', routePassword: 'D' };
 
-const HMAC_KEY = "sejonghaksikjmtz";
+const HMAC_KEY = <KEY>;
 const STATUS = { success: "success", error: "error" };
 
 //└─────────────────────────────────────────
@@ -140,13 +140,6 @@ function encrypte(input) {
   const signature = Utilities.computeHmacSha256Signature(input, HMAC_KEY);
   return String(signature);
 }
-
-function encrypteTest() {
-  const input = '';
-  const signature = Utilities.computeHmacSha256Signature(input, HMAC_KEY);
-  Logger.log(String(signature)); 
-}
-
 
   // 두 배열의 원소가 모두 일치하는지 확인합니다.
 function isSameArr(arr1, arr2) {
