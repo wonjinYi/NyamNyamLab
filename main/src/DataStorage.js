@@ -15,7 +15,7 @@ export default function DataStorage (key) {
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe", "asian", "schoolfood", "bakery", "pub"],
         ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbwBAmqbf9qfPs8TvTc_N2s-n-HMa5YMvAX_paAi-ILktD2DmnjwaQqk-vG6SR5veZqrDA/exec",
-        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbxxZFsS3WpVdOEDnFaZzqXuTneHgIKnukqQLoqmLcCZzNIyLRZNPby-Fnqm-IiBUycbnA/exec",
+        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbyq-C88QYwmHwGK-0GTuRhpyGwW8nim6A9UjG6nnSo2yj3XpKo55rO3zas8jQ0E2WJFKg/exec",
         MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
     }
     
