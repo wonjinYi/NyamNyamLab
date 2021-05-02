@@ -14,8 +14,10 @@ export default function DataStorage (key) {
             cvs : "편의점",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe", "asian", "schoolfood", "bakery", "pub"],
-        ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbwBAmqbf9qfPs8TvTc_N2s-n-HMa5YMvAX_paAi-ILktD2DmnjwaQqk-vG6SR5veZqrDA/exec",
-        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbyq-C88QYwmHwGK-0GTuRhpyGwW8nim6A9UjG6nnSo2yj3XpKo55rO3zas8jQ0E2WJFKg/exec",
+        CREATE_NEWLAB_MOVEIN : "",
+        CREATE_NEWLAB_CONSTRUCT : "",
+        ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbw6AGu6_jOF9XXuI5F4z-Qh4JH3xgtopAioBhlHuyKKHCJ4balXR1UqRWd6fRtyicc44w/exec",
+        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbxrOzADaYxfKF8EBtnpeRqpLJ9D1WTyWMFEcpMhXgCN4ew9MXgRFev2YMTGMg3eBDui8Q/exec",
         MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
     }
     

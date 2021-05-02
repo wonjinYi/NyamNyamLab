@@ -6,6 +6,7 @@ import { GithubOutlined } from "@ant-design/icons"
 import styled from 'styled-components';
 
 // imported components ==========================================
+import LabCreator from "./components/LabCreator/LabCreator";
 import LabFinder from "./LabFinder";
 import Loading from "../ShareComponents/atoms/Loading";
 import Footer from "../ShareComponents/atoms/Footer";
@@ -15,21 +16,22 @@ import Footer from "../ShareComponents/atoms/Footer";
 import LogoImage from "../logo.svg";
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
+    const [labCreatorVisible, setLabCreatorVisible] = useState(false);
 
-    useEffect( () => {
+    useEffect(() => {
         notification.open({
             message: '기존에 떠있던 지도로 가기',
-            description:'기존에 떠있던 지도를 보시려면 "연구소 이름"칸에 "전국고라니협회"를 입력하고 ENTER를 눌러주세요! (공지기간 ~5.10)',
-            duration : 0,
+            description: '기존에 떠있던 지도를 보시려면 "연구소 이름"칸에 "전국고라니협회"를 입력하고 ENTER를 눌러주세요! (공지기간 ~5.10)',
+            duration: 0,
+            placement: 'topLeft',
         });
     }, []);
-    
 
     return (
         <HomeWrap className="Home">
             <MainSection>
                 <Header>
-                    <Button disabled style={{borderRadius:'16px', marginRight:'12px'}}>
+                    <Button onClick={e => setLabCreatorVisible(true)} style={{ borderRadius: '16px', marginRight: '12px' }}>
                         연구소 만들기
                     </Button>
                     <Button disabled shape="circle" icon={<GithubOutlined />} />
@@ -40,17 +42,17 @@ export default function Home() {
                         <LogoText>냠냠랩</LogoText>
                     </Logo>
                     <LabFinder setIsLoading={setIsLoading} />
-                </Contents> 
+                </Contents>
             </MainSection>
-
+            <LabCreator labCreatorVisible={labCreatorVisible} setLabCreatorVisible={setLabCreatorVisible} />
+            
             <DetailSection>
-                <h1 style={{margin : '200px 0', textAlign:'center'}}>
+                <h1 style={{ margin: '200px 0', textAlign: 'center' }}>
                     소개가 들어갈 공간
                 </h1>
             </DetailSection>
 
             <Footer />
-
             <Loading isLoading={isLoading} />
         </HomeWrap>
     );
@@ -58,7 +60,7 @@ export default function Home() {
 
 // style ========================================================
 const HomeWrap = styled.div`
-    
+    width : 100%;
     `;
 
 const MainSection = styled.div`

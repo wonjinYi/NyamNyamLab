@@ -43,8 +43,10 @@ export default function LabFinder({ setIsLoading }) {
                 setIsLoading(true);
                 const postData = {
                     taskType: 'doRoute',
-                    labName: firstInput,
-                    routePw: secondInput,
+                    data : {
+                        labName: firstInput,
+                        routePw: secondInput,
+                    },
                 }
                 const { data: { status, data } } = await axios.post(ROUTE_MANAGER, JSON.stringify(postData));
 
