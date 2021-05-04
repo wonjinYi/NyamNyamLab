@@ -31,7 +31,19 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
     const [btnLoading, setBtnLoading] = useState(IS_VALIDATED_INIT_VALUE);
 
     const [centerPickerVisible, setCenterPickerVisible] = useState(false);
-    const [centerData, setCenterData] = useState(null);
+    const [currentCenter, setCurrentCenter] = useState(null);
+
+    useEffect(() => {
+        if(currentCenter){
+            setFormData({
+                ...formData,
+                lat: currentCenter.lat,
+                lng: currentCenter.lng,
+                zoom: currentCenter.zoom,
+            });
+        }
+        
+    }, [currentCenter]);
 
     function onChangeForm(target, value) {
         setFormData({ ...formData, [target]: value });
@@ -60,6 +72,15 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
         }
     }
 
+    function pickCenter() {
+        setCurrentCenter({
+            lat: formData.lat,
+            lng: formData.lng,
+            zoom: formData.zoom,
+        });
+        setCenterPickerVisible(true);
+    }
+
     return (
         <MoveinWrap className="Movein">
             <Button onClick={e => setCurrentContent(contentsIndex.selectType)} shape="circle" icon={<LeftOutlined />}></Button>
@@ -85,13 +106,10 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
                 <MultiInput>
                     <StyledInput disabled placeholder="연구소 위도" name="lat" value={formData.lat} />
                     <StyledInput disabled placeholder="연구소 경도" name="lng" value={formData.lng} />
-                    <StyledInput disabled placeholder="지도 기본축척" name="zoom" value={formData.zoom} />
-                    <Button onClick={e => setCenterPickerVisible(true)}>수정</Button>
+                    <StyledInput disabled placeholder="지도 기본배율" name="zoom" value={formData.zoom} />
+                    <Button onClick={pickCenter}>수정</Button>
                 </MultiInput>
-                <CenterPicker
-                    centerPickerVisible={centerPickerVisible} setCenterPickerVisible={setCenterPickerVisible}
-                    centerData={centerData} setCenterData={setCenterData}
-                />
+
 
                 <Select placeholder="연구소 기본 권한" name="defaultPermission" value={formData.defaultPermission} onChange={value => onChangeForm('defaultPermission', value)}>
                     <Select.Option value={'viewer'} key={0}>열람 가능</Select.Option>
@@ -101,6 +119,15 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
                 <Divider />
                 <Button>입주하기</Button>
             </ContentWrap>
+
+            {
+                centerPickerVisible
+                    ? <CenterPicker
+                        centerPickerVisible={centerPickerVisible} setCenterPickerVisible={setCenterPickerVisible}
+                        currentCenter={currentCenter} setCurrentCenter={setCurrentCenter}
+                    />
+                    : null
+            }
 
 
         </MoveinWrap>
