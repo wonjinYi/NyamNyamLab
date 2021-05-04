@@ -1,13 +1,23 @@
 // imported Modules =============================================
 import { React, useState, useEffect } from 'react';
+
+import axios from 'axios';
+
 import styled from 'styled-components';
 import { Input, Button, Divider, Select, message } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 
 // imported components ==========================================
+import Loading from '../../../../ShareComponents/atoms/Loading';
+
 import CenterPicker from './CenterPicker';
 
 // Main Component ===============================================
+import DataStorage from '../../../../DataStorage';
+const SEND_CHECK_MAIL = DataStorage('SEND_CHECK_MAIL');
+const ROUTE_MANAGER = DataStorage('ROUTE_MANAGER');
+const CREATE_NEWLAB_MOVEIN = DataStorage('CREATE_NEWLAB_MOVEIN');
+
 const FORMDATA_INIT_VALUE = {
     labName: null,
     lat: null,
@@ -25,16 +35,18 @@ const IS_VALIDATED_INIT_VALUE = {
     captainEmail: false,
 }
 
-export default function Movein({ setCurrentContent, contentsIndex }) {
+export default function Movein({ setCurrentContent, contentsIndex, setLabCreatorVisible }) {
     const [formData, setFormData] = useState(FORMDATA_INIT_VALUE);
     const [isValidated, setIsValidated] = useState(IS_VALIDATED_INIT_VALUE);
     const [btnLoading, setBtnLoading] = useState(IS_VALIDATED_INIT_VALUE);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [centerPickerVisible, setCenterPickerVisible] = useState(false);
     const [currentCenter, setCurrentCenter] = useState(null);
 
     useEffect(() => {
-        if(currentCenter){
+        if (currentCenter) {
             setFormData({
                 ...formData,
                 lat: currentCenter.lat,
@@ -42,14 +54,14 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
                 zoom: currentCenter.zoom,
             });
         }
-        
+
     }, [currentCenter]);
 
     function onChangeForm(target, value) {
         setFormData({ ...formData, [target]: value });
     }
 
-    function validate(e) {
+    async function validate(e) {
         let target;
         if (e.target.name) {
             target = e.target.name
@@ -57,18 +69,29 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
             target = e.target.parentNode.name
         }
 
-        switch (target) {
-            case 'captainEmail':
-                setBtnLoading({ ...btnLoading, captainEmail: true });
-                console.log('ce');
-                break;
-            case 'labName':
-                setBtnLoading({ ...btnLoading, labName: true });
-                console.log('ln');
-                break;
-            default:
-                console.error('예상하지 못한 검증요청')
-                break;
+        if (target === 'captainEmail') {
+            setBtnLoading({ ...btnLoading, captainEmail: true });
+            const { data } = await axios.post(SEND_CHECK_MAIL, JSON.stringify({ captainEmail: formData.captainEmail }));
+            if (data.status === 'success') {
+                setIsValidated({ ...isValidated, captainEmail: true });
+                message.info('확인메일이 발송되었습니다');
+            } else {
+                message.error('메일 발송과정에서 문제가 생겼어요');
+                console.error(data);
+            }
+            setBtnLoading({ ...btnLoading, captainEmail: false });
+        } else if (target === 'labName') {
+            setBtnLoading({ ...btnLoading, labName: true });
+
+            if (await isAvailableLabName(formData.labName)) {
+                setIsValidated({ ...isValidated, labName: true });
+                message.success('사용 가능한 연구소 이름입니다');
+            } else {
+                message.error('사용할 수 없는 연구소 이름입니다');
+            }
+            setBtnLoading({ ...btnLoading, labName: false });
+        } else {
+            console.error('예상하지 못한 검증요청');
         }
     }
 
@@ -79,6 +102,39 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
             zoom: formData.zoom,
         });
         setCenterPickerVisible(true);
+    }
+
+    async function onSubmit() {
+        setIsLoading(true);
+
+        for (let key of Object.keys(formData)) {
+            if (formData[key] === null || formData[key] === '') {
+                message.warn('비어있는 곳을 채워주세요');
+                return;
+            }
+        }
+
+        for (let key of Object.keys(isValidated)) {
+            if (isValidated[key] === false) {
+                message.warn('대장이메일 또는 연구소이름을 확인해주세요');
+                return;
+            }
+        }
+
+        message.success('연구소를 열심히 준비하고있어요!', 0);
+
+        const { data : { data, status } } = await axios.post(CREATE_NEWLAB_MOVEIN, JSON.stringify(formData));
+        message.destroy();
+        setIsLoading(false);
+
+        if(status==='success'){
+            setCurrentContent(contentsIndex.selectType);
+            setLabCreatorVisible(false);
+            message.success('새로운 연구소가 성공적으로 생성되었습니다');
+        } else {
+            message.error('무언가 잘못되었습니다');
+            console.error(data);
+        }
     }
 
     return (
@@ -98,8 +154,12 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
 
                 <Divider>연구소 정보</Divider>
                 <MultiInput>
-                    <StyledInput placeholder="연구소 이름" name="labName" value={formData.labName} onChange={e => onChangeForm(e.target.name, e.target.value)} />
-                    <Button name="labName" loading={btnLoading.labName} onClick={validate}>확인</Button>
+                    <StyledInput placeholder="연구소 이름" name="labName" value={formData.labName} onChange={e => onChangeForm(e.target.name, e.target.value)} disabled={isValidated.labName} />
+                    {
+                        isValidated.labName
+                            ? <Button name="labName" onClick={e => setIsValidated({ ...isValidated, labName: false })}>수정</Button>
+                            : <Button name="labName" loading={btnLoading.labName} onClick={validate}>확인</Button>
+                    }
                 </MultiInput>
 
                 <StyledPwInput placeholder="연구소 출입 비밀번호" name="routePw" value={formData.routePw} onChange={e => onChangeForm(e.target.name, e.target.value)} />
@@ -117,7 +177,7 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
                 </Select>
 
                 <Divider />
-                <Button>입주하기</Button>
+                <Button onClick={onSubmit}>입주하기</Button>
             </ContentWrap>
 
             {
@@ -129,6 +189,7 @@ export default function Movein({ setCurrentContent, contentsIndex }) {
                     : null
             }
 
+            <Loading isLoading={isLoading} />
 
         </MoveinWrap>
     );
@@ -166,4 +227,34 @@ const StyledPwInput = styled(Input.Password)`
     `;
 
 // function =====================================================
-// *
+async function isAvailableLabName(labName) {
+    let isAvailable = true;
+
+
+
+    if (labName === '' || labName === null) {
+        isAvailable = false;
+    } else if (containsOnlySpace(labName)) {
+        isAvailable = false;
+    } else {
+        const { data } = await axios.get(`${ROUTE_MANAGER}?labName=${labName}`); // 연구소 이름이 중복되는지 여부
+        console.log(data);
+        const isUnique = data.data;
+        if (!isUnique) { isAvailable = false; }
+    }
+
+    return isAvailable;
+}
+
+function containsOnlySpace(str) {
+    let res = true;
+
+    for (let i = 0; i < str.length; i++) {
+        if (str != ' ') {
+            res = false;
+            break;
+        }
+    }
+
+    return res;
+}

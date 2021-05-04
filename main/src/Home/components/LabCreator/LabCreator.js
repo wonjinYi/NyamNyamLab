@@ -22,6 +22,7 @@ export default function LabCreator({ labCreatorVisible, setLabCreatorVisible }) 
     const contentsProps = {
         setCurrentContent : setCurrentContent, 
         contentsIndex : contentsIndex, 
+        setLabCreatorVisible : setLabCreatorVisible,
     };
 
     return (
@@ -38,7 +39,7 @@ export default function LabCreator({ labCreatorVisible, setLabCreatorVisible }) 
                     (() => {
                         switch(currentContent){
                             case contentsIndex.selectType:
-                                return <SelectType {...contentsProps} setLabCreatorVisible={setLabCreatorVisible} />;
+                                return <SelectType {...contentsProps} />;
                             case contentsIndex.movein:
                                 return <Movein {...contentsProps} />;
                             case contentsIndex.construct:

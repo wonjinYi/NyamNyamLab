@@ -17,7 +17,7 @@ export default function SelectType({ setCurrentContent, contentsIndex, setLabCre
 
                 <div>
                     <Button onClick={e => setCurrentContent(contentsIndex.movein)} size="large" style={{marginRight:"16px"}} >🏢 입주</Button>
-                    <Button onClick={e => setCurrentContent(contentsIndex.construct)} size="large" >🏗 건설</Button>
+                    <Button disabled onClick={e => setCurrentContent(contentsIndex.construct)} size="large" >🏗 건설</Button>
                 </div>
 
                 <div style={{ marginTop: "16px" }}>
