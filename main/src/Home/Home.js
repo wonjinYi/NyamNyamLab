@@ -34,7 +34,9 @@ export default function Home() {
                     <Button onClick={e => setLabCreatorVisible(true)} style={{ borderRadius: '16px', marginRight: '12px' }}>
                         연구소 만들기
                     </Button>
-                    <Button disabled shape="circle" icon={<GithubOutlined />} />
+                    <a href="https://github.com/wonjinYi/NyamNyamLab" target="_blank">
+                        <Button shape="circle" icon={<GithubOutlined />} />
+                    </a>
                 </Header>
                 <Contents>
                     <Logo>
