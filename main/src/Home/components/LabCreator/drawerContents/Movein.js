@@ -78,7 +78,7 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
             for (let key of Object.keys(formData)) {
                 if (formData[key] === null || formData[key] === '') {
                     message.warn('비어있는 곳을 채워주세요');
-                    returnValue = false;
+                    setIsValidated({ ...isValidated, all: true });
                     break;
                 }
             }
@@ -86,7 +86,7 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
             for (let key of Object.keys(isValidated)) {
                 if (isValidated[key] === false) {
                     message.warn('대장이메일 또는 연구소이름을 확인해주세요');
-                    returnValue = false;
+                    setIsValidated({ ...isValidated, all: true });
                     break;
                 }
             }
@@ -131,7 +131,9 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
         setIsLoading(true);
 
         const target = { target: { name: 'all' }};
-        if (await validate(target)) {
+        await validate(target);
+
+        if (isValidated.all) {
             message.success('새 연구소를 열심히 준비하고있어요!', 0);
 
             const { data: { data, status } } = await axios.post(CREATE_NEWLAB_MOVEIN, JSON.stringify(formData));
@@ -160,15 +162,24 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
 
                 <Divider>대장 정보</Divider>
                 <MultiInput>
-                    <StyledInput placeholder="대장님의 구글계정 Email" name="captainEmail" value={formData.captainEmail} onChange={e => onChangeForm(e.target.name, e.target.value)} />
-                    <Button name="captainEmail" loading={btnLoading.captainEmail} onClick={validate}>확인</Button>
+                    <StyledInput placeholder="대장님의 구글계정 Email" name="captainEmail" value={formData.captainEmail} onChange={e => onChangeForm(e.target.name, e.target.value)} 
+                        disabled={btnLoading.captainEmail || isValidated.captainEmail}
+                    />
+
+                    {
+                        isValidated.captainEmail
+                            ? <Button name="captainEmail" onClick={e => setIsValidated({ ...isValidated, captainEmail: false })}>수정</Button>
+                            : <Button name="captainEmail" loading={btnLoading.captainEmail} onClick={validate}>확인</Button>
+                    }
                 </MultiInput>
 
                 <StyledPwInput placeholder="연구소 관리 비밀번호" name="captainPw" value={formData.captainPw} onChange={e => onChangeForm(e.target.name, e.target.value)} />
 
                 <Divider>연구소 정보</Divider>
                 <MultiInput>
-                    <StyledInput placeholder="연구소 이름" name="labName" value={formData.labName} onChange={e => onChangeForm(e.target.name, e.target.value)} disabled={isValidated.labName} />
+                    <StyledInput placeholder="연구소 이름" name="labName" value={formData.labName} onChange={e => onChangeForm(e.target.name, e.target.value)} 
+                        disabled={btnLoading.labName || isValidated.labName} 
+                    />
                     {
                         isValidated.labName
                             ? <Button name="labName" onClick={e => setIsValidated({ ...isValidated, labName: false })}>수정</Button>
