@@ -30,15 +30,15 @@ export default function MapsModalComment({ labAccessInfo, selectedNyam, refreshM
         // 요청 데이터 준비`
         const url = `${accessManagerUrl}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            nyam : {
+            nyam: {
                 id: selectedNyam.id,
                 comment: JSON.stringify({ comment: [newComment, ...commentsData] }),
             },
-            labId : labId,
+            labId: labId,
         });
 
         // 요청
-        await axios.post(url, data);  
+        await axios.post(url, data);
 
         // 리프레시
         await refreshMaps();
@@ -53,11 +53,11 @@ export default function MapsModalComment({ labAccessInfo, selectedNyam, refreshM
         // 요청 데이터 준비
         const url = `${accessManagerUrl}?taskTarget=comment&taskType=edit`;
         const data = JSON.stringify({
-            nyam : {
+            nyam: {
                 id: selectedNyam.id,
                 comment: JSON.stringify({ comment: [...commentsData.slice(0, index), ...commentsData.slice(index + 1)] }),
             },
-            labId : labId,
+            labId: labId,
         });
 
         // 요청
@@ -74,7 +74,10 @@ export default function MapsModalComment({ labAccessInfo, selectedNyam, refreshM
             <Form>
                 <Input
                     placeholder="새로운 의견을 적어주세요"
-                    value={newComment} onChange={(e) => { setNewComment(e.target.value); }}
+                    value={newComment} 
+                    onChange={(e) => { setNewComment(e.target.value); }}
+                    onPressEnter={onCreate}
+
                     style={{ borderRadius: "8px", marginRight: "4px" }}
                     suffix={
                         <Popover placement="bottom" title={null} content={<Picker onEmojiClick={(e, obj) => { setNewComment(newComment + obj.emoji) }} />} trigger="click">
