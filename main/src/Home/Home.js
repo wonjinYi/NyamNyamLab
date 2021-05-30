@@ -18,15 +18,6 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [labCreatorVisible, setLabCreatorVisible] = useState(false);
 
-    useEffect(() => {
-        notification.open({
-            message: '기존에 떠있던 지도로 가기',
-            description: '기존에 떠있던 지도를 보시려면 "연구소 이름"칸에 "전국고라니협회"를 입력하고 ENTER를 눌러주세요! (공지기간 ~5.10)',
-            duration: 0,
-            placement: 'topLeft',
-        });
-    }, []);
-
     return (
         <HomeWrap className="Home">
             <MainSection>

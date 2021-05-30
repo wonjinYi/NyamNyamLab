@@ -31,11 +31,23 @@ export default function LabFinder({ setIsLoading }) {
     const [firstInput, setFirstInput] = useState('');
     const [secondInput, setSecondInput] = useState('');
 
+    // ▼ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !!
+    const [TEMP_DATALAB_AUTOACCESS, SET_TEMP_DATALAB_AUTOACCESS] = useState(false); 
+    // ▲ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! ▲ 
+
     useEffect(() => {
         if (labAccessInfo) {
             setIsReady(true);
         }
     }, [labAccessInfo]);
+
+    // ▼ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! ▼ 
+    useEffect(() => {
+        if(TEMP_DATALAB_AUTOACCESS===true && firstInput==='데이터연구소'){
+            onSubmit();
+        }
+    }, [firstInput]);
+    // ▲ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! ▲ 
 
     async function onSubmit(e) {
         switch (findOption) {
@@ -109,6 +121,17 @@ export default function LabFinder({ setIsLoading }) {
                         연구소 찾기
                     </FinderButton>
 
+                    {/* ▼ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! ▼  */}
+                    <FinderButton 
+                        type="primary" size="large" style={{marginTop:"16px"}} 
+                        onClick={ e => { 
+                            setFirstInput('데이터연구소');
+                            SET_TEMP_DATALAB_AUTOACCESS(true);
+                        }}
+                    >
+                        데이터연구소 지도 보기(임시)
+                    </FinderButton>
+                    {/* ▲ 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! 데이터 연구소 접속을 위한 임시 기능 !! ▲  */}
                 </FinderForm>
             </LabFinderWrap>
 
@@ -145,6 +168,10 @@ const FinderForm = styled.div`
     align-items : flex-end;
 
     width : 350px;
+
+    @media(max-width:768px){
+        width : 90%;
+    }
     `;
 
 const FinderInput = styled(Input)`
