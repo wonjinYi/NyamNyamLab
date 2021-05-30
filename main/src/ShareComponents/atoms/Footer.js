@@ -21,6 +21,8 @@ export default function Footer () {
 const FooterWrap = styled.div`
     display : flex;
     
+    justify-content : flex-end;
+
     width : 100%;
     padding : 10px 20px;
 
