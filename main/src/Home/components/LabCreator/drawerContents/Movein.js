@@ -31,6 +31,7 @@ const FORMDATA_INIT_VALUE = {
 }
 
 const IS_VALIDATED_INIT_VALUE = {
+    all: false,
     labName: false,
     captainEmail: false,
 }
@@ -62,6 +63,7 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
     }
 
     async function validate(e) {
+        // target 정하기
         let target;
         if (e.target.name) {
             target = e.target.name
@@ -69,14 +71,35 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
             target = e.target.parentNode.name
         }
 
-        if (target === 'captainEmail') {
+        // target별 검증하기 : all, captainEmail, labName
+        if (target === 'all') {
+            let returnValue = true;
+
+            for (let key of Object.keys(formData)) {
+                if (formData[key] === null || formData[key] === '') {
+                    message.warn('비어있는 곳을 채워주세요');
+                    returnValue = false;
+                    break;
+                }
+            }
+
+            for (let key of Object.keys(isValidated)) {
+                if (isValidated[key] === false) {
+                    message.warn('대장이메일 또는 연구소이름을 확인해주세요');
+                    returnValue = false;
+                    break;
+                }
+            }
+            
+            return returnValue;
+        } else if (target === 'captainEmail') {
             setBtnLoading({ ...btnLoading, captainEmail: true });
             const { data } = await axios.post(SEND_CHECK_MAIL, JSON.stringify({ captainEmail: formData.captainEmail }));
             if (data.status === 'success') {
                 setIsValidated({ ...isValidated, captainEmail: true });
-                message.info('확인메일이 발송되었습니다');
+                message.info('확인메일을 보내드렸어요. 메일함을 꼭 확인해주세요!');
             } else {
-                message.error('메일 발송과정에서 문제가 생겼어요');
+                message.error('문제가 생겨 메일을 보내지 못했습니다.');
                 console.error(data);
             }
             setBtnLoading({ ...btnLoading, captainEmail: false });
@@ -107,33 +130,24 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
     async function onSubmit() {
         setIsLoading(true);
 
-        for (let key of Object.keys(formData)) {
-            if (formData[key] === null || formData[key] === '') {
-                message.warn('비어있는 곳을 채워주세요');
-                return;
+        const target = { target: { name: 'all' }};
+        if (await validate(target)) {
+            message.success('새 연구소를 열심히 준비하고있어요!', 0);
+
+            const { data: { data, status } } = await axios.post(CREATE_NEWLAB_MOVEIN, JSON.stringify(formData));
+            message.destroy();
+            setIsLoading(false);
+
+            if (status === 'success') {
+                setCurrentContent(contentsIndex.selectType);
+                setLabCreatorVisible(false);
+                message.success('새로운 연구소가 성공적으로 생성되었습니다');
+            } else {
+                message.error('무언가 잘못되었습니다');
+                console.error(data);
             }
-        }
-
-        for (let key of Object.keys(isValidated)) {
-            if (isValidated[key] === false) {
-                message.warn('대장이메일 또는 연구소이름을 확인해주세요');
-                return;
-            }
-        }
-
-        message.success('연구소를 열심히 준비하고있어요!', 0);
-
-        const { data : { data, status } } = await axios.post(CREATE_NEWLAB_MOVEIN, JSON.stringify(formData));
-        message.destroy();
-        setIsLoading(false);
-
-        if(status==='success'){
-            setCurrentContent(contentsIndex.selectType);
-            setLabCreatorVisible(false);
-            message.success('새로운 연구소가 성공적으로 생성되었습니다');
         } else {
-            message.error('무언가 잘못되었습니다');
-            console.error(data);
+            setIsLoading(false);
         }
     }
 
