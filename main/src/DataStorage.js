@@ -1,4 +1,5 @@
 // [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
+// prettier-ignore
 export default function DataStorage (key) {
     const data = {
         NYAM_TYPES : {
@@ -20,7 +21,7 @@ export default function DataStorage (key) {
         ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbyOHtCkG4cwHLFZ6YdwyVBgsc0ZU10qBQGw1KST0aFUFUbQDFdRBEljknpH_qq4j0f00A/exec",
         MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
         
-        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycbwpRm7JuOINlnTgI3vVibl51cJAdhGX49vRN_m34CMDyVudu8cjHRsgBY97vsM7-63N7Q/exec",
+        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycby3U6PeqsWBGPGaamO8FfgR2mpqr0CjYVocCaU1T6eDWmnUF0QgY_rYRl3hU2CMk5YIRQ/exec",
     }
     
     return data[key];
