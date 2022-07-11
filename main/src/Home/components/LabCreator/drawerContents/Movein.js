@@ -148,7 +148,6 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
         setCurrentContent(contentsIndex.selectType);
         setLabCreatorVisible(false);
         message.success("새로운 연구소가 성공적으로 생성되었습니다");
-        console.log(data);
       } else {
         message.error("무언가 잘못되었습니다");
         console.error(data);
