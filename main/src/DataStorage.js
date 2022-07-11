@@ -18,7 +18,7 @@ export default function DataStorage (key) {
             cvs : "편의점",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe", "asian", "schoolfood", "bakery", "pub"],
-        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbzU-VM4HCXt5wh2Co4oaHBhbFijVOFoHRQZRrp11QWsZLVln9Dbf6f6TBEuN14DTi3PoA/exec",
+        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbzw-9gkJRYErIWDpwWN71nnXZPviM5eYyQ_xbIpCD0cfHOR08TGPsDwF82UJ7bls2-tyQ/exec",
         CREATE_NEWLAB_CONSTRUCT : "",
         ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbw6AGu6_jOF9XXuI5F4z-Qh4JH3xgtopAioBhlHuyKKHCJ4balXR1UqRWd6fRtyicc44w/exec",
         ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbz5iYlaH55WjYJSzvlEnM1ADaP5iwRD8gAbYhHgMtQDQLjHgEmlBi1XZRITl5u1AzZCLA/exec",

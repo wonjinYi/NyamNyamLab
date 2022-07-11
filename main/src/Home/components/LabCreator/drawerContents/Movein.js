@@ -172,7 +172,7 @@ export default function Movein({ setCurrentContent, contentsIndex, setLabCreator
         <Divider>대장 정보</Divider>
         <MultiInput>
           <StyledInput
-            placeholder="대장님의 구글계정 Email"
+            placeholder="대장님의 Email"
             name="captainEmail"
             value={formData.captainEmail}
             onChange={(e) => onChangeForm(e.target.name, e.target.value)}

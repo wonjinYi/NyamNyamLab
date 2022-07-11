@@ -37,8 +37,9 @@ export default function SelectType({ setCurrentContent, contentsIndex, setLabCre
           <p>
             <strong>✍️ 공통 준비물 </strong>
             새로운 연구소를 만들기 위해서는 <strong>구글 계정</strong>이 꼭 필요합니다. 냠냠랩이
-            구글서비스 기반으로 동작하기 때문에, 사용가능한 구글계정을 하나 준비해주셔야 합니다.
-            만약 없더라도 연구소를 가질 수는 있지만, 추후 연구소 관리가 정말정말로 어려울 수 있어요.
+            구글서비스 기반으로 동작하기 때문에, 사용가능한 gmail을 하나 준비해주셔야 합니다. 물론
+            gmail이 아니더라도 연구소를 가질 수는 있지만, 추후 연구소 관리가 정말정말로 어려울 수
+            있어요.
           </p>
           <p>
             <strong>🏢 입주 </strong>
