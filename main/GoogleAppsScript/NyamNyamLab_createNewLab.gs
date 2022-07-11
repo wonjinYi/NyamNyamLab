@@ -1,110 +1,172 @@
-const KEYS = ['id', 'name', 'lat', 'lng', 'type', 'open', 'close', 'description', 'menu', 'comment'];
-const TEMPLATE_SS_ID = "1jRWWpbjiBG3jGSpgcrPDz7Z-ngzBx-EtF7ai30vStSc";
+/*
+Wonjin Yi. 2022. < NyamNyamLab 조직 내부의 냠냠거리 공유 서비스 >
+NyamNyamLab_CreateNewLab : 버전 1
 
-function doGet(e) {
-  const { title } = e.parameter;
-  createAndSendDocument(title)
-}
+이 코드는 입주 옵션에 대한 새로운 연구소를 생성하는 역할을 담당합니다.
+1. 기존 템플릿으로부터 냠냠랩 관리 계정의 드라이브에 새로운 연구소(구글시트) 생성 및 사용자설정값 입력
+2. NyamNyamLab_RouteManager로 새로운 라우팅 추가요청
+3. 호출된 냠냠랩 프론트엔드 서비스로의 생성절차 완료 응답
 
-function createAndSendDocument(title) {
-  const template = SpreadsheetApp.openById(TEMPLATE_SS_ID);
+이 코드는 냠냠랩 프론트엔드 서비스로부터 직접 호출됩니다.
+*/
 
-  const newSpreadSheet = template.copy(`냠연구소 for ${title}`);
-  const ssName = newSpreadSheet.getName();
-  const ssUrl = newSpreadSheet.getUrl();
+//┌── Global Constants ────────────────────────────┐
 
-  const email = Session.getActiveUser().getEmail();
-  const subject = `[냠냠랩] "${title}"에 대한 새로운 연구소가 생성되었습니다!`;
-  const body = '안녕하세요, 새로운 "냠냠 대장"님! 냠냠랩에 입주해주셔서 감사합니다!\n'
-                + '저는 연구지원 책임자 "Jin"이구요, 냠냠랩의 새로운 대장님들을 맞이하는 역할을 맡고 있어요\n\n'
-                + '이 이메일을 받아보신 대장님을 위해서 몇 가지 안내사항을 보내드릴게요!\n'
-                + '함께하시는 "냠냠 개척자"분들께도 전해주시면 원활한 연구에 도움이 될 거에요!\n'
-                + '\n\n\n\n'
-                + '--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--'
-                + '\n\n\n\n'
+const SHEET_INDEX = { nyam: 0, setting: 1, captain: 2 };
 
-                + '1. \n'
-                + '첫 번째! 방금 냠냠 대장님의 동의를 얻어 실행한 프로그램이 어떤 일을 했는지 알려드릴게요.\n\n'
-                + '이 이메일을 받으셨다면 "냠냠랩"홈페이지에서 요청하신 "새로운 연구소 만들기"가 성공적으로 완료된 것이에요.\n'
-                + '이 세계의 어딘가에 떠도는 "연구소 설계도"를 바탕으로, '
-                + '대장님의 Google Drive에 새로운 Google Spread Sheet(이하 구글시트)를 만들어 넣어두었습니다.\n'
-                + '그런 다음 대장님께 지금 보고계신 이메일을 보내드렸어요!\n\n' 
-                + '이게 전부랍니다. 대장님의 개인정보를 함부로 펼쳐보는 일은 절대 하지 않았어요.\n'
-                + '\n\n\n'
+const SETTING_KEYS = ["name", "lat", "lng", "zoom", "customIcon", "defaultPermission"];
+const CAPTAIN_KEYS = ["captainPw"];
 
-                + '2. \n'
-                + '두 번째! 만들어진 구글시트에 대해서 알려드릴게요\n\n'
-                + `구글시트의 이름은 "${ssName}"입니다. 가장 아래에 링크를 걸어두었어요.\n`
-                + '앞으로 "냠냠랩"을 통해서 연구하시는 모든 내용은 이 구글시트에 저장될 거에요. 그 저장된 내용을 "냠냠랩"이 받아와서 연구시설을 제공한답니다.\n'
-                + '즉! 저희 "냠냠랩"에서는 대장님의 연구내용을 전혀 알지 못해요. 그저 대장님이 필요하실 때만 내용을 읽어서 보여드릴 뿐이에요.\n'
-                + '\n'
-                + '그 말인 즉슨, 이 구글시트가 사라지거나 실수에 의해 망가지면 정상적으로 연구활동을 하실 수 없다는 이야기에요.\n'
-                + '구글시트를 직접 열어보신다면, 정말 조심하셔야 한답니다. 문제가 생기면 대부분의 경우에 구글시트가 제공하는 자체 복원기능으로 복구할 수 있을거에요.\n'
-                + '\n'
-                + '혹시나 복구에 어려움을 겪으신다면 "냠냠랩" 우측하단의 "상담하기"를 눌러 저에게 도움을 요청해주세요. 성의껏 도와드릴게요.\n'
-                + '\n\n\n'
+const TEMPLATE_ID = "1Dgd_vMUR9QF8eHZWeGXJenlXn3SpxUwySc80J-IS1xY";
+const ROUTE_MANAGER_URL =
+  "https://script.google.com/macros/s/AKfycbz5iYlaH55WjYJSzvlEnM1ADaP5iwRD8gAbYhHgMtQDQLjHgEmlBi1XZRITl5u1AzZCLA/exec";
 
-                + '3. \n'
-                + '세 번째! "냠냠랩"을 이용하여 연구활동을 하시는 방법을 알려드릴게요.\n\n'
-                + '아래에 여러가지 버전의 가이드를 준비해 두었으니, 필요하신 내용을 원하는 형태로 열람해보세요!\n'
-                + '추가예정\n'
+const STATUS = { success: "success", error: "error" };
 
-                + '\n\n\n\n'
-                + '--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--'
-                + '\n\n\n\n'
+//└─────────────────────────────────────────
 
-                + '이렇게 제가 꼭 알려드리고 싶었던 세 가지를 말씀드렸어요!\n\n'
-                + '앞으로 "냠냠대장"님과 "냠냠개척자"분들의 연구활동에 저희 "냠냠랩"이 많은 도움이 되었으면 좋겠어요.\n'
-                + '힘닿는데까지 열심히 연구시설을 개선하고, 보수하고 있겠습니다.\n'
-                + '\n'
-                + '끝으로, 저희 냠냠랩에 대장님이 입주해주셔서 정말 감사합니다.\n'
-                + '불편한 점이 있으시면 "냠냠랩"홈페이지 우측하단의 "상담하기"를 눌러 언제나 말씀해주세요.\n'
-                + '항상 대장님과 개척자분들의 연락을 기다리고 있을게요.\n'
-                + '\n'
-                + '--- 냠냠랩 연구지원 책임자 "Jin" 드림 ---\n'
-
-                + '\n\n\n\n'
-                + '--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--o--'
-                + '\n\n\n\n'
-
-                + 'P.S. 새로 만들어진 연구소의 "구글시트" 링크를 같이 보내드립니다 ☆'
-                + '\n'
-                + ssUrl;
-  GmailApp.sendEmail(email, subject, body);
-}
+//┌── Receive Request ─────────────────────────────┐
 
 function test() {
-  var sheet = SpreadsheetApp.create(`냠연구소 for TEST`);
-  sheet.appendRow(KEYS);
-
-  // Get the URL, name of the document.
-  var url = sheet.getUrl();
-  var subject = sheet.getName();
-
-  // log
-  Logger.log(getSpreadSheetId(url));
+  // const postData = {
+  //   labName : '굉굉',
+  //   lat: 53.53,
+  //   lng : 53.53,
+  //   zoom : 53,
+  //   customIcon : false,
+  //   defaultPermission : 'edit',
+  //   captainEmail : 'studioplug17@gmail.com',
+  //   routePw : 'aaa',
+  //   captainPw : 'bbb',
+  // };
 }
 
-function test2() {
-  const temp = SpreadsheetApp.openById(TEMPLATE_SS_ID);
-  Logger.log(temp.getName());
-  console.log(temp.getDataRange().getValues());
+function doGet(e) {}
 
-  const copied = temp.copy("이히히 사본이다");
-  Logger.log(copied.getName());
+function doPost(e) {
+  try {
+    const postData = JSON.parse(e.postData.contents);
+    const {
+      labName,
+      lat,
+      lng,
+      zoom,
+      customIcon /*, defaultPermission*/,
+      captainEmail,
+      routePw /*, captainPw*/,
+    } = postData;
 
-  var email = Session.getActiveUser().getEmail();
-  var body = '새로운 남 연구소가 만들어졌습니다! 아래 Url을 눌러 데이터를 직접 열람하실 수 있습니다.\n' + copied.getUrl();
-  GmailApp.sendEmail(email, temp.getName(), body);
+    // 템플릿문서 복제
+    const template = SpreadsheetApp.openById(TEMPLATE_ID);
+
+    const newLab = template.copy(`냠냠랩:${labName}`);
+    const newLabUrl = newLab.getUrl();
+    const newLabId = getSpreadSheetId(newLabUrl);
+    SpreadsheetApp.setActiveSpreadsheet(newLab);
+
+    // 새로운 연구소에 사용자 설정값 입력
+    const settingRow = [labName, lat, lng, zoom, customIcon /*, defaultPermission*/];
+    // const captainRow = [encrypte(captainPw)];
+
+    const settingSheet = SpreadsheetApp.setActiveSheet(newLab.getSheets()[SHEET_INDEX.setting]);
+    settingSheet.appendRow(settingRow);
+
+    //const captainSheet = SpreadsheetApp.setActiveSheet(newLab.getSheets()[SHEET_INDEX.captain]);
+    //captainSheet.appendRow(captainRow);
+
+    // 냠냠대장 시트 편집자로 추가
+    newLab.addEditor(captainEmail);
+
+    // <NyamNyamLab_RouteManager>로 신규 라우팅 등록 요청
+    var d = {
+      labId: newLabId,
+      labName: labName,
+      routePw: routePw,
+    };
+    requestAddRoute(d);
+
+    var mailBody = `<body style="margin: 0"> <div style="background-color: #333333; display: flex; align-items: center; padding: 12px"> <h1 style=" color: white; padding-left: 8px; margin: 0; font-weight: 200; font-size: 48px; display: flex; align-items: center; padding: 12px; " > 냠냠랩 </h1> </div> <div style="background-color: #505050; padding: 32px; color: white"> <p style="font-size: 12px">───── 냠냠랩 지킴이, 고라니로부터 도착한 편지 ─────</p> <h2>✅ 대장님의 연구소가 잘 만들어졌어요!</h2> <br /> <p>대장님이 요청하신 ${labName}연구소 입주가 모두 처리되었어요.</p> <p> 아래와 같이 연구소와 연구데이터에 접근하실 수 있는 방법을 안내드립니다. <span style="background-color: yellow; color: red; font-weight: bolder"> 단, 연구소 출입 비밀번호만 빼구요! </span> </p> <p>출입비밀번호는 저도 알지 못하고, 알려드릴 수 없어요. 때문에 대장님께서 잘 기억해 주셔야 합니다. </p> <br /> <h3 style="color: white">연구소 접속하기</h3> <ol style="color: white"> <li style="color: white"> 냠냠랩 홈페이지에서 [연구소 이름을 알려주세요]에 ${labName}입력 </li> <li style="color: white">[출입 비밀번호를 알려주세요]에 출입 비밀번호 입력</li> <li style="color: white">[연구소 찾기]버튼 클릭</li> </ol> <br /> <h3>연구소 데이터 스프레드 시트로 열람하기</h3> <p> 그동안 냠냠랩에서 연구하신 내용이 어떤 꾸밈도 없이 완전한 날 것으로 있는 공간이에요. 혹여나 데이터 백업이 필요하거나 대규모의 수정이 필요하다면 사용해보세요. </p> <a href="https://docs.google.com/spreadsheets/d/${newLabId}" target="_blank" style="text-decoration: none; color: #62b6ff; font-weight: lighter" >https://docs.google.com/spreadsheets/d/${newLabId}</a > <br /><br /> <p>혹시 연구를 하시다가 도움이 필요한 일이 생긴다면 아래에 적어드린 이메일주소로 연락주세요! 성의껏 도와드릴게요.</p><br /><br /><br /> <p>고라니 드림</p> </div> <div style="background-color: #333333; padding: 32px"> <a href="https://nyam.wonj.in/" target="_blank" style="text-decoration: none; color: #62b6ff; font-weight: lighter" >https://nyam.wonj.in/</a > <p style="text-decoration: none; color: white; font-weight: lighter; margin: 0"> goranimaster17@gmail.com </p> </div> </body>`;
+
+    MailApp.sendEmail({
+      to: captainEmail,
+      subject: `[냠냠랩] 대장님의 \"${labName}\" 연구소가 생겼어요! `,
+      htmlBody: mailBody,
+    });
+
+    // 프로그램 종료
+    return buildResponse({
+      status: STATUS.success,
+      data: "정상적으로 잘 생성되었습니다" + JSON.stringify(d),
+    });
+  } catch (err) {
+    Logger.log(err);
+    return buildResponse({
+      status: STATUS.error,
+      data: String(err),
+    });
+  }
 }
 
-function testTrigger() {
-  console.log("hihi");
-}
-function getSpreadSheetId(url){
-  Logger.log(typeof url);
-  const temp = url.split('/');
-  const id = temp[temp.length-2];
-  
+//└─────────────────────────────────────────┘
+
+//┌── Main Processing ─────────────────────────────┐
+
+//└─────────────────────────────────────────┘
+
+//┌── Utilities ─────────────────────────────────┐
+
+// 스프레드시트의 url로부터 문서 id를 추출합니다.
+function getSpreadSheetId(url) {
+  const temp = url.split("/");
+  const id = temp[temp.length - 2];
+
   return id;
 }
+
+function reqAddRouteTest() {
+  // var data =
+  requestAddRoute({
+    labId: "123",
+    labName: "nametest",
+    routePw: "aaaa",
+  });
+}
+
+// <NyamNyamLab_RouteManager>로 addRoute요청을 보냅니다.
+function requestAddRoute({ labId, labName, routePw }) {
+  const url = ROUTE_MANAGER_URL;
+  const reqData = {
+    taskType: "addRoute",
+    data: {
+      labId: labId,
+      labName: labName,
+      routePw: routePw,
+    },
+  };
+  const options = {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify(reqData),
+  };
+
+  UrlFetchApp.fetch(url, options);
+}
+
+// 비밀번호를 암호화합니다.
+function encrypte(input) {
+  const signature = Utilities.computeHmacSha256Signature(input, HMAC_KEY);
+  return String(signature);
+}
+
+// doGet, doPost에 대한 응답을 Json형태의 양식에 맞추어 구성합니다.
+function buildResponse({ status, data }) {
+  const response = {
+    status: status,
+    data: data,
+  };
+  return ContentService.createTextOutput(JSON.stringify(response)).setMimeType(
+    ContentService.MimeType.JSON
+  );
+}
+
+//└─────────────────────────────────────────┘

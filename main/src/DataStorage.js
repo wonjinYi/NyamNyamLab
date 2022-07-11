@@ -1,7 +1,10 @@
-// [경고] 임시적인 사용자설정 보관소 - 나중에 다른 방법으로 대체필요
 // prettier-ignore
 export default function DataStorage (key) {
     const data = {
+        ROUTE : {
+            HOME : "home",
+            APP : "app",
+        },
         NYAM_TYPES : {
             korea : "한식",
             china : "중식",
@@ -15,13 +18,13 @@ export default function DataStorage (key) {
             cvs : "편의점",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe", "asian", "schoolfood", "bakery", "pub"],
-        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbxOcOe80qpz4OEBtZQAUvglvTHhidWRtvWJocxnRnCQf7L-qhKJe4iGrU3gFsUIO-zhAQ/exec",
+        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbzU-VM4HCXt5wh2Co4oaHBhbFijVOFoHRQZRrp11QWsZLVln9Dbf6f6TBEuN14DTi3PoA/exec",
         CREATE_NEWLAB_CONSTRUCT : "",
         ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbw6AGu6_jOF9XXuI5F4z-Qh4JH3xgtopAioBhlHuyKKHCJ4balXR1UqRWd6fRtyicc44w/exec",
-        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbyOHtCkG4cwHLFZ6YdwyVBgsc0ZU10qBQGw1KST0aFUFUbQDFdRBEljknpH_qq4j0f00A/exec",
+        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbz5iYlaH55WjYJSzvlEnM1ADaP5iwRD8gAbYhHgMtQDQLjHgEmlBi1XZRITl5u1AzZCLA/exec",
         MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
         
-        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycby3U6PeqsWBGPGaamO8FfgR2mpqr0CjYVocCaU1T6eDWmnUF0QgY_rYRl3hU2CMk5YIRQ/exec",
+        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycbzOVLMzHMqGIAKzUZuUKDVtZsW11Kg_FmPJqffeLhXUw-PAOKychlChqSyQFxHwPebshQ/exec",
     }
     
     return data[key];
