@@ -17,6 +17,8 @@ object-assign
  * @license  MIT
  */
 
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+
 /** @license React v0.20.1
  * scheduler.production.min.js
  *
