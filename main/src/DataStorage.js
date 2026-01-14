@@ -18,13 +18,13 @@ export default function DataStorage (key) {
             cvs : "편의점",
         }, 
         NYAM_TYPES_KEY : ["korea", "china", "japan", "fastfood", "cvs", "cafe", "asian", "schoolfood", "bakery", "pub"],
-        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbzw-9gkJRYErIWDpwWN71nnXZPviM5eYyQ_xbIpCD0cfHOR08TGPsDwF82UJ7bls2-tyQ/exec",
+        CREATE_NEWLAB_MOVEIN : "https://script.google.com/macros/s/AKfycbzJHyjnmotq2YZlZY0FMaCrJ9DhvEQH3Ypmym2-KYhRqsX432tIWb_Ekdh9Di_il5Eruw/exec",
         CREATE_NEWLAB_CONSTRUCT : "",
-        ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbw6AGu6_jOF9XXuI5F4z-Qh4JH3xgtopAioBhlHuyKKHCJ4balXR1UqRWd6fRtyicc44w/exec",
-        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbz5iYlaH55WjYJSzvlEnM1ADaP5iwRD8gAbYhHgMtQDQLjHgEmlBi1XZRITl5u1AzZCLA/exec",
+        ACCESS_MANAGER : "https://script.google.com/macros/s/AKfycbxG61CxkA0gpkVjDabJy0ppZf8qg7k_uBw5JMlfbbW_QsOTOOQxqaytMUHk-er70MLzhg/exec",
+        ROUTE_MANAGER : "https://script.google.com/macros/s/AKfycbwSwo8RKpf2juoN2phctY4O63M1duFbVOBPlQ5KFQJqsXyAzZVNy-JKASD3ilx5kBJ1TQ/exec",
         MAP_SOURCE: "https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ont9t74d67",
         
-        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycbzOVLMzHMqGIAKzUZuUKDVtZsW11Kg_FmPJqffeLhXUw-PAOKychlChqSyQFxHwPebshQ/exec",
+        SEND_CHECK_MAIL : "https://script.google.com/macros/s/AKfycbwYqPWz7um1k9atzWcMTmiQdSkX4dHzZ-oKJ93BH0VWNVcrAUfw-_z9eGOCWRHhOWo_hg/exec",
     }
     
     return data[key];
